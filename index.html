@@ -414,14 +414,14 @@
   }
   function renderExamResultsOverview() {
     let results = DB.examsTaken;
-    let html = '能able><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><tr>';
+    let html = 'able><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><tr>';
     results.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`; });
     html += '</table>';
     document.getElementById('adminResultsOverview').innerHTML = html || '<p>No exam results.</p>';
   }
   function renderAssignmentResultsOverview() {
     let results = DB.assignmentResults;
-    let html = '能able><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr>';
+    let html = 'able><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr>';
     results.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); let assign = DB.assignments.find(a => a.id === r.assignmentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${assign ? assign.title : '?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`; });
     html += '</table>';
     document.getElementById('adminAssignmentResults').innerHTML = html || '<p>No assignment results.</p>';
@@ -476,7 +476,7 @@
   }
   function renderTeacherAssignments() {
     let myAssign = DB.assignments.filter(a => a.teacherId === currentUser.id);
-    let html = '能able><tr><th>Title</th><th>Subject</th><th>Questions</th><th>Action</th></tr>';
+    let html = 'able><tr><th>Title</th><th>Subject</th><th>Questions</th><th>Action</th></tr>';
     myAssign.forEach(a => { html += `<tr><td>${a.title}</td><td>${getSubjectName(a.subjectId)}</td><td>${a.questions.length}</td><td><button class="small danger" data-del-ass="${a.id}">Delete</button></td>`; });
     html += '</table>';
     document.getElementById('teacherAssignmentsList').innerHTML = html;
@@ -716,14 +716,14 @@
   }
   function renderStudentExamHistory() {
     let myExams = DB.examsTaken.filter(e => e.studentId === currentUser.id);
-    let html = '能able><tr><th>Subject</th><th>Score</th><th>Date</th></td>';
+    let html = 'able><tr><th>Subject</th><th>Score</th><th>Date</th></td>';
     myExams.forEach(e => { html += `<tr><td>${getSubjectName(e.subjectId)}</td><td>${e.score}/${e.total}</td><td>${new Date(e.timestamp).toLocaleString()}</td>`; });
     html += '</table>';
     document.getElementById('studentResultsHistory').innerHTML = html || '<p>No exams taken.</p>';
   }
   function renderStudentAssignmentHistory() {
     let myResults = DB.assignmentResults.filter(r => r.studentId === currentUser.id);
-    let html = '能able><tr><th>Assignment</th><th>Score</th><th>Date</th></tr>';
+    let html = 'able><tr><th>Assignment</th><th>Score</th><th>Date</th></tr>';
     myResults.forEach(r => { let assign = DB.assignments.find(a => a.id === r.assignmentId); html += `</td><td>${assign ? assign.title : '?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`; });
     html += '<tr>';
     document.getElementById('studentAssignmentResults').innerHTML = html || '<p>No assignments attempted.</p>';
