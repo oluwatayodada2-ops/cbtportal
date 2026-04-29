@@ -48,6 +48,329 @@
     .toggle-btn { background: #f1f5f9; color: #1e293b; border: none; padding: 0.4rem 1rem; border-radius: 2rem; cursor: pointer; font-size: 0.8rem; }
     .toggle-btn.active { background: #f5b042; color: #1e2f3a; font-weight: 600; }
     .hidden { display: none; }
+
+    /* ========== ADVANCED RESPONSIVE STYLES (NO CODE BREAKAGE, PURE LAYOUT) ========== */
+    /* Better table responsiveness */
+    table { width: 100%; border-collapse: collapse; display: block; overflow-x: auto; white-space: nowrap; }
+    table thead, table tbody { display: table; width: 100%; }
+    @media (max-width: 640px) {
+      table, thead, tbody, th, td, tr { display: block; }
+      thead tr { position: absolute; top: -9999px; left: -9999px; }
+      tr { margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 0.5rem; background: white; }
+      td { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid #eef2f6; white-space: normal; word-break: break-word; }
+      td:before { content: attr(data-label); font-weight: 600; width: 40%; margin-right: 0.5rem; color: #0f2b3d; }
+      td:last-child { border-bottom: none; }
+      .app-container { border-radius: 1rem; }
+      .main-content { padding: 1rem; }
+      body { padding: 0.75rem; }
+    }
+    /* Make form-grid stack beautifully on mobile but keep side-by-side on desktop */
+    @media (max-width: 768px) {
+      .form-grid {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .form-grid .input-field,
+      .form-grid button,
+      .form-grid select,
+      .form-grid input {
+        width: 100%;
+      }
+      .form-grid button {
+        margin-top: 0.25rem;
+      }
+      /* fix question batch inner forms to stack cleanly */
+      .question-batch .form-grid,
+      .word-question-card .form-grid {
+        flex-direction: column;
+      }
+      .question-batch .form-grid .input-field,
+      .word-question-card .form-grid .input-field {
+        width: 100%;
+      }
+      /* teacher subject row: button goes below checkboxes */
+      .teacher-subj-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .teacher-subj-row .checkbox-group {
+        width: 100%;
+        margin-bottom: 0.75rem;
+      }
+      .teacher-subj-row button {
+        align-self: flex-start;
+      }
+      /* better spacing for card */
+      .card {
+        padding: 1rem;
+      }
+      /* header adjustments */
+      .app-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+      }
+      .user-info {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      /* align class assignment remove buttons */
+      .flex-between {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      /* toggle group wrap */
+      .toggle-group {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      /* admin exam action buttons group */
+      td:last-child {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        justify-content: flex-start;
+      }
+    }
+    /* For large screens - keep logical alignment, no scattering */
+    @media (min-width: 769px) {
+      .form-grid {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 1rem;
+      }
+      .form-grid .input-field {
+        flex: 1 1 180px;
+      }
+      .form-grid button {
+        flex: 0 0 auto;
+        margin-bottom: 0;
+      }
+      /* teacher subject layout: horizontal alignment of checkboxes + button stays cohesive */
+      .teacher-subj-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: space-between;
+      }
+      .checkbox-group {
+        flex: 2 1 auto;
+      }
+    }
+    /* fix actions inside admin exam list and teacher exam list */
+    td button, .card button {
+      transition: all 0.15s ease;
+    }
+    td button.danger, td button.small {
+      margin: 0.2rem 0.2rem;
+    }
+    /* scheduled exams: card buttons aligned */
+    .start-scheduled-exam, [data-start-ass] {
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+    /* Ensure word question container inputs align */
+    .word-question-card .form-grid .input-field {
+      min-width: 0;
+    }
+    /* batch questions container: by default each field gets full width on mobile */
+    .question-batch .form-grid input, 
+    .question-batch .form-grid select {
+      width: 100%;
+    }
+    /* Exam palette buttons: make small & wrap */
+    .paletteBtn {
+      margin: 2px;
+      font-size: 0.7rem;
+    }
+    /* Admin class assignment UI - prevent scattered remove buttons */
+    #classSubjectAssignments .form-grid {
+      margin-top: 0.5rem;
+    }
+    .remove-cs, .add-subj-class {
+      margin-top: 0.3rem;
+      margin-right: 0.3rem;
+    }
+    /* collapsible questions list padding */
+    .questions-list {
+      padding-left: 0;
+    }
+    /* responsive collapsible items */
+    .questions-list div {
+      word-break: break-word;
+    }
+    /* student exam area radio buttons line break */
+    #examArea .card div[style*="radio"] label {
+      display: inline-block;
+      margin: 0.3rem 0.8rem 0.3rem 0;
+      white-space: normal;
+    }
+    /* improve spacing for subject approval checkboxes */
+    [data-subj-approve] {
+      margin-right: 0.5rem;
+    }
+    /* assignment creation question builder (remove button positioning) */
+    .remove-assign-q {
+      margin-top: 0.8rem;
+      width: auto;
+    }
+    /* ensure textarea wraps nicely */
+    textarea {
+      width: 100%;
+      resize: vertical;
+    }
+    /* admin timer / simple forms alignment */
+    #globalTimerMinutes, #adminNewPass {
+      max-width: 100%;
+    }
+    /* small screen tables without data-label fallback (better) */
+    @media (max-width: 640px) {
+      td:before {
+        content: attr(data-label);
+        font-weight: 600;
+        width: 45%;
+        display: inline-block;
+      }
+      td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+    }
+    /* align teacher assignment submit button with the form */
+    #submitAssignmentBtn {
+      width: auto;
+      margin-top: 0.5rem;
+    }
+    /* word panel upload section spacing */
+    #wordPanel .form-grid {
+      margin-bottom: 0.5rem;
+    }
+    /* admin dashboard: teachers list delete button inline */
+    #teachersList .flex-between, #studentsList .flex-between {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    /* exam timer card: set button right */
+    #saveTimerBtn {
+      margin-bottom: 0;
+    }
+    /* Make question options readable */
+    .radio-group label, .checkbox-group label {
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    /* Exam submission section (manual/word) fields & button group */
+    #examSubmissionSection .form-grid, #wordExamSubmissionSection .form-grid {
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      #examSubmissionSection .form-grid, #wordExamSubmissionSection .form-grid {
+        align-items: stretch;
+      }
+    }
+    /* class assignment entry - avoid broken layout */
+    #classSubjectAssignments div[style*="border:1px solid"] {
+      overflow-x: auto;
+    }
+    /* teacher analytics tables inside cards */
+    #teacherAnalytics table, #adminResultsOverview table, #adminAssignmentResults table {
+      display: table;
+      overflow-x: auto;
+      width: 100%;
+    }
+    @media (max-width: 640px) {
+      #teacherAnalytics table, #adminResultsOverview table, #adminAssignmentResults table {
+        display: block;
+      }
+      #teacherAnalytics td, #adminResultsOverview td, #adminAssignmentResults td {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+    /* keep buttons inside word card grouped (remove button) */
+    .word-question-card .form-grid button.danger {
+      align-self: flex-start;
+    }
+    /* admin subject assign: remove buttons as group */
+    .remove-cs {
+      margin: 0.2rem 0.2rem 0.2rem 0;
+    }
+    /* ensure teacher batch creation "Save All Questions"  button not floating */
+    #saveBatchBtn, #saveDocxQuestionsBtn {
+      width: auto;
+      margin-top: 0.8rem;
+      display: inline-block;
+    }
+    /* better behavior for student exam area: buttons group */
+    #examArea .form-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      justify-content: center;
+    }
+    /* avoid overflow in assignment container */
+    #assignQuestionsContainer .question-batch .form-grid {
+      margin-bottom: 0.5rem;
+    }
+    /* responsive image/icon free */
+    .badge {
+      white-space: nowrap;
+    }
+    @media (max-width: 480px) {
+      .badge {
+        white-space: normal;
+        text-align: center;
+      }
+      button, .toggle-btn {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+      }
+      .card-header {
+        font-size: 1rem;
+      }
+    }
+    /* teachers list & students list actions inline */
+    .flex-between button {
+      margin-left: auto;
+    }
+    /* ensure admin exam action buttons do not scatter */
+    [data-del-exam], [data-resched-exam], [data-approve-exam], [data-publish-exam] {
+      margin: 0.2rem;
+      white-space: nowrap;
+    }
+    /* teacher subject assignments: checkboxes group line break correctly for small but button below */
+    @media (max-width: 640px) {
+      .teacher-subj-row .checkbox-group {
+        gap: 0.5rem;
+      }
+      .save-teacher-subj {
+        width: 100%;
+        text-align: center;
+      }
+    }
+    /* make sure exam area palette buttons wrap */
+    #examArea .card > div:last-child {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 1rem;
+    }
+    /* log out button hover effect */
+    .logout-btn:hover {
+      background: #9f3927;
+    }
+    /* submit exam approval messages */
+    #examSubmitMsg, #wordExamSubmitMsg {
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
@@ -481,10 +804,10 @@
           <button class="small" data-resched-exam="${exam.id}">Reschedule</button>
           ${exam.status === 'pending' ? '<button class="small primary" data-approve-exam="'+exam.id+'">Approve</button>' : ''}
           ${exam.status === 'approved' ? '<button class="small primary" data-publish-exam="'+exam.id+'">Publish</button>' : ''}
-        </td>
-      </tr>`;
+         </td>
+       </tr>`;
     }
-    html += '</tbody>}</div>';
+    html += '</tbody></div>';
     document.getElementById('adminExamsList').innerHTML = html || '<p>No exams created.</p>';
     
     document.querySelectorAll('[data-del-exam]').forEach(btn => btn.onclick = async () => { await deleteExam(btn.dataset.delExam); refreshAdmin(); });
@@ -621,8 +944,8 @@
   function renderTeachersList() { let teachers = DB.users.filter(u=>u.role==='teacher'); let html='<div>'; teachers.forEach(t=>{html+=`<div class="flex-between"><span>${t.name} (${t.email})</span><button class="small danger" data-del-teacher="${t.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('teachersList').innerHTML=html; document.querySelectorAll('[data-del-teacher]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delTeacher); refreshAdmin();}); }
   function renderStudentsList() { let students = DB.users.filter(u=>u.role==='student'); let html='<div>'; students.forEach(s=>{ let classObj = DB.classes.find(c=>c.id===s.classId); html+=`<div class="flex-between"><span>${s.name} (${s.email}) - ${classObj ? getClassLabel(classObj) : 'No class'}</span><button class="small danger" data-del-student="${s.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('studentsList').innerHTML=html; document.querySelectorAll('[data-del-student]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delStudent); refreshAdmin();}); }
   function renderSubjectApproval() { let html='<div class="form-grid">'; DB.subjects.forEach(s=>{html+=`<div><label><input type="checkbox" data-subj-approve="${s.id}" ${s.approved?'checked':''}> ${s.name}</label></div>`;}); html+='</div><button id="saveSubjectApprovalBtn" class="primary">Save Approvals</button>'; document.getElementById('subjectApprovalList').innerHTML=html; document.getElementById('saveSubjectApprovalBtn')?.addEventListener('click',async()=>{for(let cb of document.querySelectorAll('[data-subj-approve]')){let sid=cb.dataset.subjApprove; let subj=DB.subjects.find(s=>s.id===sid); if(subj){subj.approved=cb.checked; await updateSubject(subj);}} refreshAdmin();}); }
-  function renderExamResultsOverview() { let results=DB.examsTaken; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>'; for (let r of results) { let student=DB.users.find(u=>u.id===r.studentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${getSubjectName(r.subjectId)}</td>.html${r.score}/${r.total}<td>${new Date(r.timestamp).toLocaleString()}</td>=<button class="small danger delete-exam-result" data-result-id="${r.id}">Delete</button></td>`; } html+='</tbody></table>'; document.getElementById('adminResultsOverview').innerHTML=html||'<p>No exam results.</p>'; document.querySelectorAll('.delete-exam-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshAdmin(); } }); }
-  function renderAssignmentResultsOverview() { let results=DB.assignmentResults; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; results.forEach(r=>{let student=DB.users.find(u=>u.id===r.studentId); let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${assign?assign.title:'?'}</td>.html${r.score}/${r.total}<td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('adminAssignmentResults').innerHTML=html||'<p>No assignment results.</p>'; }
+  function renderExamResultsOverview() { let results=DB.examsTaken; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>'; for (let r of results) { let student=DB.users.find(u=>u.id===r.studentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td><button class="small danger delete-exam-result" data-result-id="${r.id}">Delete</button></td>`; } html+='</tbody></table>'; document.getElementById('adminResultsOverview').innerHTML=html||'<p>No exam results.</p>'; document.querySelectorAll('.delete-exam-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshAdmin(); } }); }
+  function renderAssignmentResultsOverview() { let results=DB.assignmentResults; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; results.forEach(r=>{let student=DB.users.find(u=>u.id===r.studentId); let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${assign?assign.title:'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('adminAssignmentResults').innerHTML=html||'<p>No assignment results.</p>'; }
 
   // Teacher functions (preserve original + add exam submission)
   function refreshTeacher() {
@@ -837,7 +1160,6 @@
       await addQuestion(newQ);
     }
     alert(`Saved ${extractedWordQuestions.length} questions to bank!`);
-    // Optionally clear or keep questions for exam submission
   });
   
   // NEW: Submit Word exam for approval
@@ -850,7 +1172,6 @@
     let dateTimeStr = document.getElementById('wordExamDateTime').value;
     if(!dateTimeStr) { alert("Set exam date & time"); return; }
     if(extractedWordQuestions.length === 0) { alert("No questions extracted. Please upload and edit a Word document first."); return; }
-    // Validate each question
     for(let i=0; i<extractedWordQuestions.length; i++) {
       let q = extractedWordQuestions[i];
       if(!q.text.trim() || !q.options[0] || !q.options[1] || !q.options[2] || !q.options[3]) {
@@ -875,11 +1196,6 @@
     };
     await addExam(newExam);
     document.getElementById('wordExamSubmitMsg').innerHTML = '<span style="color:green;">✅ Exam submitted for admin approval! It will be available to all arms of ' + baseClass + '.</span>';
-    // Optionally reset the Word panel after submission
-    // extractedWordQuestions = [];
-    // renderWordQuestions();
-    // document.getElementById('saveDocxQuestionsBtn').style.display = 'none';
-    // document.getElementById('wordExamSubmissionSection').style.display = 'none';
     refreshTeacher();
   });
   
@@ -905,7 +1221,7 @@
     document.querySelectorAll('[data-del-q]').forEach(btn => btn.onclick = async () => { let qid = btn.dataset.delQ; DB.questions = DB.questions.filter(q => q.id !== qid); await deleteQuestion(qid); refreshTeacher(); });
   }
   function renderTeacherAssignments() { let myAssign = DB.assignments.filter(a => a.teacherId === currentUser.id); let html = '<table style="width:100%"><thead><tr><th>Title</th><th>Subject</th><th>Class</th><th>Questions</th><th>Action</th></tr></thead><tbody>'; myAssign.forEach(a => { html += `<tr><td>${a.title}</td><td>${getSubjectName(a.subjectId)}</td><td>${getClassLabel(DB.classes.find(c=>c.id===a.classId)||{})}</td><td>${a.questions.length}</td><td><button class="small danger" data-del-ass="${a.id}">Delete</button></td></tr>`; }); html += '</tbody></table>'; document.getElementById('teacherAssignmentsList').innerHTML = html; document.querySelectorAll('[data-del-ass]').forEach(btn => btn.onclick = async () => { await deleteAssignment(btn.dataset.delAss); refreshTeacher(); }); }
-  function renderTeacherAnalytics() { let teacherSubjects = currentUser.assignedSubjects || []; let examResults = DB.examsTaken.filter(r => teacherSubjects.includes(r.subjectId)); let assignResults = DB.assignmentResults.filter(r => { let assign = DB.assignments.find(a => a.id === r.assignmentId); return assign && teacherSubjects.includes(assign.subjectId); }); let html = `<div><strong>Exam Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>`; if(examResults.length===0) html += "<tr><td colspan='5'>No exam attempts.</tr>"; else examResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${getSubjectName(r.subjectId)}</td>.html${r.score}/${r.total}<td>${new Date(r.timestamp).toLocaleString()}</td>=<button class="small danger delete-teacher-result" data-result-id="${r.id}">Delete</button></td>`; }); html += `</tbody></table><strong>Assignment Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>`; if(assignResults.length===0) html += "<tr><td colspan='4'>No assignment attempts.</tr>"; else assignResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); let assign = DB.assignments.find(a => a.id === r.assignmentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${assign ? assign.title : '?'}</td>.html${r.score}/${r.total}<td>${new Date(r.timestamp).toLocaleString()}</td>`; }); html += `</tbody></table></div>`; document.getElementById('teacherAnalytics').innerHTML = html; document.querySelectorAll('.delete-teacher-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshTeacher(); } }); }
+  function renderTeacherAnalytics() { let teacherSubjects = currentUser.assignedSubjects || []; let examResults = DB.examsTaken.filter(r => teacherSubjects.includes(r.subjectId)); let assignResults = DB.assignmentResults.filter(r => { let assign = DB.assignments.find(a => a.id === r.assignmentId); return assign && teacherSubjects.includes(assign.subjectId); }); let html = `<div><strong>Exam Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>`; if(examResults.length===0) html += "<tr><td colspan='5'>No exam attempts.</td>"; else examResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td><button class="small danger delete-teacher-result" data-result-id="${r.id}">Delete</button></td>`; }); html += `</tbody></table><strong>Assignment Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>`; if(assignResults.length===0) html += "<tr><td colspan='4'>No assignment attempts.</td>"; else assignResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); let assign = DB.assignments.find(a => a.id === r.assignmentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${assign ? assign.title : '?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`; }); html += `</tbody></table></div>`; document.getElementById('teacherAnalytics').innerHTML = html; document.querySelectorAll('.delete-teacher-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshTeacher(); } }); }
   
   // Bulk paste (unchanged)
   document.getElementById('parseBulkBtn')?.addEventListener('click', async () => {
@@ -1042,8 +1358,8 @@
     document.querySelectorAll('[data-start-ass]').forEach(btn=>btn.onclick=()=>startAssignment(btn.dataset.startAss));
   }
   async function startAssignment(assignId){ alert("Assignment taking feature active (full implementation in original code)."); }
-  function renderStudentExamHistory() { let myExams=DB.examsTaken.filter(e=>e.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Subject</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myExams.forEach(e=>{html+=`<tr><td>${getSubjectName(e.subjectId)}</td>.html${e.score}/${e.total}<td>${new Date(e.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentResultsHistory').innerHTML=html||'<p>No exams taken.</p>'; }
-  function renderStudentAssignmentHistory() { let myResults=DB.assignmentResults.filter(r=>r.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myResults.forEach(r=>{let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<td>${assign?assign.title:'?'}</td>.html${r.score}/${r.total}<td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentAssignmentResults').innerHTML=html||'<p>No assignments attempted.</p>'; }
+  function renderStudentExamHistory() { let myExams=DB.examsTaken.filter(e=>e.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Subject</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myExams.forEach(e=>{html+=`<tr><td>${getSubjectName(e.subjectId)}</td><td>${e.score}/${e.total}</td><td>${new Date(e.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentResultsHistory').innerHTML=html||'<p>No exams taken.</p>'; }
+  function renderStudentAssignmentHistory() { let myResults=DB.assignmentResults.filter(r=>r.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myResults.forEach(r=>{let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${assign?assign.title:'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentAssignmentResults').innerHTML=html||'<p>No assignments attempted.</p>'; }
   
   // --- Login & logout with persistence ---
   document.getElementById('doLoginBtn')?.addEventListener('click', async () => {
