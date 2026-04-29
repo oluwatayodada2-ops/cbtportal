@@ -124,7 +124,17 @@
           </div>
           <div id="docxQuestionsContainer" style="margin-top:1rem;"></div>
           <button id="saveDocxQuestionsBtn" class="primary success" style="display:none;">Save All Edited Questions to Bank</button>
-          <div id="docxResultMsg" class="mt-2"></div>
+          
+          <!-- NEW: Exam submission section for Word panel (same options as manual) -->
+          <div id="wordExamSubmissionSection" style="display:none; margin-top:1.5rem; border-top:1px solid #ddd; padding-top:1rem;">
+            <div class="form-grid">
+              <div class="input-field"><label>Select Class for Exam</label><select id="wordExamClassSelect"></select></div>
+              <div class="input-field"><label>Exam Type</label><select id="wordExamTypeSelect"><option value="midterm">Mid Term</option><option value="final">Final Exam</option></select></div>
+              <div class="input-field"><label>Exam Date & Time</label><input type="datetime-local" id="wordExamDateTime"></div>
+            </div>
+            <button id="submitWordExamForApprovalBtn" class="primary">📤 Submit Word Exam for Admin Approval</button>
+            <div id="wordExamSubmitMsg" class="mt-2"></div>
+          </div>
         </div>
       </div>
       <div class="card"><div class="card-header">Bulk Paste Questions (Text)</div><div class="form-grid"><div class="input-field"><label>Subject</label><select id="bulkSubjectSelect"></select></div></div><textarea id="bulkQuestionsText" rows="6" placeholder="Question: ...&#10;A) ...&#10;B) ...&#10;C) ...&#10;D) ...&#10;Answer: A"></textarea><button id="parseBulkBtn" class="primary mt-2">Add to Question Bank</button><div id="bulkResultMsg" class="mt-2"></div></div>
@@ -303,7 +313,7 @@
   function getTeacherName(id) { let t = DB.users.find(u=>u.id===id && u.role==='teacher'); return t ? t.name : "Unknown"; }
   function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m=> m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
 
-  // ========== FIX #1 + #3: WORKING START EXAM (QUICK BANK) WITH RESUME ==========
+  // ========== WORKING START EXAM (QUICK BANK) WITH RESUME ==========
   async function startQuickExam(subjectId, resumeData = null) {
     if(activeExamInterval) clearInterval(activeExamInterval);
     if(examSaveInterval) clearInterval(examSaveInterval);
@@ -356,7 +366,7 @@
     }, 1000);
   }
 
-  // Scheduled exam with resume (fully functional, cross-arm via baseClass)
+  // Scheduled exam with resume (cross-arm via baseClass)
   async function startScheduledExam(exam, resumeData = null) {
     if(activeExamInterval) clearInterval(activeExamInterval);
     let questions = exam.questions;
@@ -415,7 +425,7 @@
     }
   }
 
-  // ========== RENDER FUNCTIONS (ALL ORIGINAL, UNCHANGED) ==========
+  // ========== RENDER FUNCTIONS ==========
   function renderAll() {
     if (!currentUser) {
       document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
@@ -471,8 +481,8 @@
           <button class="small" data-resched-exam="${exam.id}">Reschedule</button>
           ${exam.status === 'pending' ? '<button class="small primary" data-approve-exam="'+exam.id+'">Approve</button>' : ''}
           ${exam.status === 'approved' ? '<button class="small primary" data-publish-exam="'+exam.id+'">Publish</button>' : ''}
-         </td>
-       </tr>`;
+        </td>
+      </tr>`;
     }
     html += '</tbody>}</div>';
     document.getElementById('adminExamsList').innerHTML = html || '<p>No exams created.</p>';
@@ -611,8 +621,8 @@
   function renderTeachersList() { let teachers = DB.users.filter(u=>u.role==='teacher'); let html='<div>'; teachers.forEach(t=>{html+=`<div class="flex-between"><span>${t.name} (${t.email})</span><button class="small danger" data-del-teacher="${t.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('teachersList').innerHTML=html; document.querySelectorAll('[data-del-teacher]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delTeacher); refreshAdmin();}); }
   function renderStudentsList() { let students = DB.users.filter(u=>u.role==='student'); let html='<div>'; students.forEach(s=>{ let classObj = DB.classes.find(c=>c.id===s.classId); html+=`<div class="flex-between"><span>${s.name} (${s.email}) - ${classObj ? getClassLabel(classObj) : 'No class'}</span><button class="small danger" data-del-student="${s.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('studentsList').innerHTML=html; document.querySelectorAll('[data-del-student]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delStudent); refreshAdmin();}); }
   function renderSubjectApproval() { let html='<div class="form-grid">'; DB.subjects.forEach(s=>{html+=`<div><label><input type="checkbox" data-subj-approve="${s.id}" ${s.approved?'checked':''}> ${s.name}</label></div>`;}); html+='</div><button id="saveSubjectApprovalBtn" class="primary">Save Approvals</button>'; document.getElementById('subjectApprovalList').innerHTML=html; document.getElementById('saveSubjectApprovalBtn')?.addEventListener('click',async()=>{for(let cb of document.querySelectorAll('[data-subj-approve]')){let sid=cb.dataset.subjApprove; let subj=DB.subjects.find(s=>s.id===sid); if(subj){subj.approved=cb.checked; await updateSubject(subj);}} refreshAdmin();}); }
-  function renderExamResultsOverview() { let results=DB.examsTaken; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>'; for (let r of results) { let student=DB.users.find(u=>u.id===r.studentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td><button class="small danger delete-exam-result" data-result-id="${r.id}">Delete</button></td></tr>`; } html+='</tbody></table>'; document.getElementById('adminResultsOverview').innerHTML=html||'<p>No exam results.</p>'; document.querySelectorAll('.delete-exam-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshAdmin(); } }); }
-  function renderAssignmentResultsOverview() { let results=DB.assignmentResults; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; results.forEach(r=>{let student=DB.users.find(u=>u.id===r.studentId); let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${assign?assign.title:'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td></tr>`;}); html+='</tbody></table>'; document.getElementById('adminAssignmentResults').innerHTML=html||'<p>No assignment results.</p>'; }
+  function renderExamResultsOverview() { let results=DB.examsTaken; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>'; for (let r of results) { let student=DB.users.find(u=>u.id===r.studentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${getSubjectName(r.subjectId)}</td>.html${r.score}/${r.total}这些<td>${new Date(r.timestamp).toLocaleString()}</td>=<button class="small danger delete-exam-result" data-result-id="${r.id}">Delete</button></td>`; } html+='</tbody></table>'; document.getElementById('adminResultsOverview').innerHTML=html||'<p>No exam results.</p>'; document.querySelectorAll('.delete-exam-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshAdmin(); } }); }
+  function renderAssignmentResultsOverview() { let results=DB.assignmentResults; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; results.forEach(r=>{let student=DB.users.find(u=>u.id===r.studentId); let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${assign?assign.title:'?'}</td>.html${r.score}/${r.total}这些<td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('adminAssignmentResults').innerHTML=html||'<p>No assignment results.</p>'; }
 
   // Teacher functions (preserve original + add exam submission)
   function refreshTeacher() {
@@ -625,6 +635,8 @@
     });
     let classSelect = document.getElementById('examClassSelect');
     if(classSelect) classSelect.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join('');
+    let wordClassSelect = document.getElementById('wordExamClassSelect');
+    if(wordClassSelect) wordClassSelect.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join('');
     let assignClassSelect = document.getElementById('assignClassSelect');
     if(assignClassSelect) assignClassSelect.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join('');
     renderMyQuestionsBySubject(); 
@@ -691,7 +703,7 @@
     refreshTeacher();
   });
   
-  // Submit exam for approval (modified to store baseClass for cross-arm)
+  // Submit exam for approval (manual batch)
   document.getElementById('submitExamForApprovalBtn')?.addEventListener('click', async () => {
     let subjectId = document.getElementById('batchSubjectSelect').value;
     if(!subjectId) { alert("Select subject"); return; }
@@ -700,7 +712,6 @@
     let examType = document.getElementById('examTypeSelect').value;
     let dateTimeStr = document.getElementById('examDateTime').value;
     if(!dateTimeStr) { alert("Set exam date & time"); return; }
-    // Gather questions from the batch forms
     let num = parseInt(document.getElementById('numQuestions').value);
     let questions = [];
     for(let i=0; i<num; i++) {
@@ -768,7 +779,8 @@
       extractedWordQuestions = rawQuestions.map((q, idx) => ({ ...q, tempId: idx }));
       renderWordQuestions();
       document.getElementById('saveDocxQuestionsBtn').style.display = 'inline-block';
-      document.getElementById('docxResultMsg').innerHTML = `<span style="color:green;">✅ Successfully extracted ${extractedWordQuestions.length} potential questions. Edit and select correct answers, then save.</span>`;
+      document.getElementById('wordExamSubmissionSection').style.display = 'block'; // show submission section
+      document.getElementById('docxResultMsg').innerHTML = `<span style="color:green;">✅ Successfully extracted ${extractedWordQuestions.length} potential questions. Edit and select correct answers, then save or submit exam.</span>`;
     } catch (err) { console.error(err); document.getElementById('docxResultMsg').innerHTML = `<span style="color:red;">Error parsing file: ${err.message}</span>`; }
   }
   function renderWordQuestions() {
@@ -825,9 +837,49 @@
       await addQuestion(newQ);
     }
     alert(`Saved ${extractedWordQuestions.length} questions to bank!`);
-    document.getElementById('docxQuestionsContainer').innerHTML = '';
-    document.getElementById('saveDocxQuestionsBtn').style.display = 'none';
-    document.getElementById('docxUpload').value = '';
+    // Optionally clear or keep questions for exam submission
+  });
+  
+  // NEW: Submit Word exam for approval
+  document.getElementById('submitWordExamForApprovalBtn')?.addEventListener('click', async () => {
+    let subjectId = document.getElementById('docxSubjectSelect').value;
+    if(!subjectId) { alert("Select subject"); return; }
+    let classId = document.getElementById('wordExamClassSelect').value;
+    if(!classId) { alert("Select class"); return; }
+    let examType = document.getElementById('wordExamTypeSelect').value;
+    let dateTimeStr = document.getElementById('wordExamDateTime').value;
+    if(!dateTimeStr) { alert("Set exam date & time"); return; }
+    if(extractedWordQuestions.length === 0) { alert("No questions extracted. Please upload and edit a Word document first."); return; }
+    // Validate each question
+    for(let i=0; i<extractedWordQuestions.length; i++) {
+      let q = extractedWordQuestions[i];
+      if(!q.text.trim() || !q.options[0] || !q.options[1] || !q.options[2] || !q.options[3]) {
+        alert(`Question ${i+1} is incomplete. Please fill all text and options.`);
+        return;
+      }
+    }
+    let title = prompt("Exam Title:", `${getSubjectName(subjectId)} - ${examType} Exam (Word Import)`);
+    if(!title) return;
+    let targetClass = DB.classes.find(c => c.id === classId);
+    let baseClass = targetClass ? targetClass.className : null;
+    let examId = "exam_"+Date.now()+Math.random();
+    let questions = extractedWordQuestions.map(q => ({
+      text: q.text,
+      options: q.options,
+      correct: q.correct
+    }));
+    let newExam = {
+      id: examId, title, teacherId: currentUser.id, subjectId, classId, baseClass,
+      examType, scheduledDateTime: new Date(dateTimeStr).toISOString(), status: "pending",
+      questions: questions, createdAt: Date.now()
+    };
+    await addExam(newExam);
+    document.getElementById('wordExamSubmitMsg').innerHTML = '<span style="color:green;">✅ Exam submitted for admin approval! It will be available to all arms of ' + baseClass + '.</span>';
+    // Optionally reset the Word panel after submission
+    // extractedWordQuestions = [];
+    // renderWordQuestions();
+    // document.getElementById('saveDocxQuestionsBtn').style.display = 'none';
+    // document.getElementById('wordExamSubmissionSection').style.display = 'none';
     refreshTeacher();
   });
   
@@ -853,7 +905,7 @@
     document.querySelectorAll('[data-del-q]').forEach(btn => btn.onclick = async () => { let qid = btn.dataset.delQ; DB.questions = DB.questions.filter(q => q.id !== qid); await deleteQuestion(qid); refreshTeacher(); });
   }
   function renderTeacherAssignments() { let myAssign = DB.assignments.filter(a => a.teacherId === currentUser.id); let html = '<table style="width:100%"><thead><tr><th>Title</th><th>Subject</th><th>Class</th><th>Questions</th><th>Action</th></tr></thead><tbody>'; myAssign.forEach(a => { html += `<tr><td>${a.title}</td><td>${getSubjectName(a.subjectId)}</td><td>${getClassLabel(DB.classes.find(c=>c.id===a.classId)||{})}</td><td>${a.questions.length}</td><td><button class="small danger" data-del-ass="${a.id}">Delete</button></td></tr>`; }); html += '</tbody></table>'; document.getElementById('teacherAssignmentsList').innerHTML = html; document.querySelectorAll('[data-del-ass]').forEach(btn => btn.onclick = async () => { await deleteAssignment(btn.dataset.delAss); refreshTeacher(); }); }
-  function renderTeacherAnalytics() { let teacherSubjects = currentUser.assignedSubjects || []; let examResults = DB.examsTaken.filter(r => teacherSubjects.includes(r.subjectId)); let assignResults = DB.assignmentResults.filter(r => { let assign = DB.assignments.find(a => a.id === r.assignmentId); return assign && teacherSubjects.includes(assign.subjectId); }); let html = `<div><strong>Exam Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>`; if(examResults.length===0) html += "<tr><td colspan='5'>No exam attempts.</td></tr>"; else examResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td><button class="small danger delete-teacher-result" data-result-id="${r.id}">Delete</button></td></tr>`; }); html += `</tbody></table><strong>Assignment Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>`; if(assignResults.length===0) html += "<tr><td colspan='4'>No assignment attempts.</td></tr>"; else assignResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); let assign = DB.assignments.find(a => a.id === r.assignmentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${assign ? assign.title : '?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td></tr>`; }); html += `</tbody></table></div>`; document.getElementById('teacherAnalytics').innerHTML = html; document.querySelectorAll('.delete-teacher-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshTeacher(); } }); }
+  function renderTeacherAnalytics() { let teacherSubjects = currentUser.assignedSubjects || []; let examResults = DB.examsTaken.filter(r => teacherSubjects.includes(r.subjectId)); let assignResults = DB.assignmentResults.filter(r => { let assign = DB.assignments.find(a => a.id === r.assignmentId); return assign && teacherSubjects.includes(assign.subjectId); }); let html = `<div><strong>Exam Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>`; if(examResults.length===0) html += "<tr><td colspan='5'>No exam attempts.这些</tr>"; else examResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${getSubjectName(r.subjectId)}</td>.html${r.score}/${r.total}这些<td>${new Date(r.timestamp).toLocaleString()}</td>=<button class="small danger delete-teacher-result" data-result-id="${r.id}">Delete</button></td>`; }); html += `</tbody></table><strong>Assignment Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>`; if(assignResults.length===0) html += "<tr><td colspan='4'>No assignment attempts.这些</tr>"; else assignResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); let assign = DB.assignments.find(a => a.id === r.assignmentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${assign ? assign.title : '?'}</td>.html${r.score}/${r.total}这些<td>${new Date(r.timestamp).toLocaleString()}</td>`; }); html += `</tbody></table></div>`; document.getElementById('teacherAnalytics').innerHTML = html; document.querySelectorAll('.delete-teacher-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshTeacher(); } }); }
   
   // Bulk paste (unchanged)
   document.getElementById('parseBulkBtn')?.addEventListener('click', async () => {
@@ -990,8 +1042,8 @@
     document.querySelectorAll('[data-start-ass]').forEach(btn=>btn.onclick=()=>startAssignment(btn.dataset.startAss));
   }
   async function startAssignment(assignId){ alert("Assignment taking feature active (full implementation in original code)."); }
-  function renderStudentExamHistory() { let myExams=DB.examsTaken.filter(e=>e.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Subject</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myExams.forEach(e=>{html+=`<tr><td>${getSubjectName(e.subjectId)}</td><td>${e.score}/${e.total}</td><td>${new Date(e.timestamp).toLocaleString()}</td></tr>`;}); html+='</tbody></table>'; document.getElementById('studentResultsHistory').innerHTML=html||'<p>No exams taken.</p>'; }
-  function renderStudentAssignmentHistory() { let myResults=DB.assignmentResults.filter(r=>r.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myResults.forEach(r=>{let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${assign?assign.title:'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td></tr>`;}); html+='</tbody></table>'; document.getElementById('studentAssignmentResults').innerHTML=html||'<p>No assignments attempted.</p>'; }
+  function renderStudentExamHistory() { let myExams=DB.examsTaken.filter(e=>e.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Subject</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myExams.forEach(e=>{html+=`<tr><td>${getSubjectName(e.subjectId)}</td>.html${e.score}/${e.total}这些<td>${new Date(e.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentResultsHistory').innerHTML=html||'<p>No exams taken.</p>'; }
+  function renderStudentAssignmentHistory() { let myResults=DB.assignmentResults.filter(r=>r.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myResults.forEach(r=>{let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<td>${assign?assign.title:'?'}</td>.html${r.score}/${r.total}这些<td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentAssignmentResults').innerHTML=html||'<p>No assignments attempted.</p>'; }
   
   // --- Login & logout with persistence ---
   document.getElementById('doLoginBtn')?.addEventListener('click', async () => {
