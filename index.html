@@ -71,6 +71,16 @@
     .dashboard h2 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #0f2b3d; }
 
     /* ============================================================ */
+    /* ============ LOGIN PANEL =================================== */
+    /* ============================================================ */
+    #loginPanel { max-width: 480px; margin: 2rem auto; padding: 2rem; }
+    #loginPanel .card-header { font-size: 1.3rem; text-align: center; border-left: none; border-bottom: 2px solid #f5b042; padding-left: 0; padding-bottom: 0.8rem; margin-bottom: 1.5rem; }
+    #loginPanel .form-grid { flex-direction: column; gap: 1rem; }
+    #loginPanel .input-field { flex: 1 1 100%; }
+    #loginPanel input { padding: 0.75rem 1rem; font-size: 0.95rem; }
+    #loginPanel button { width: 100%; padding: 0.85rem; font-size: 0.95rem; margin-top: 0.5rem; }
+
+    /* ============================================================ */
     /* ============ CARDS ========================================= */
     /* ============================================================ */
     .card {
@@ -248,6 +258,7 @@
       .form-grid { gap: 0.75rem; }
       .input-field { flex: 1 1 200px; }
       .dashboard h2 { font-size: 1.35rem; }
+      #loginPanel { padding: 1.8rem; }
     }
 
     /* ============================================================ */
@@ -291,6 +302,12 @@
       .main-content { padding: 0.9rem; }
       .dashboard h2 { font-size: 1.2rem; margin-bottom: 0.6rem; text-align: center; }
 
+      /* --- Login panel --- */
+      #loginPanel { margin: 0.5rem auto; padding: 1.4rem 1.1rem; }
+      #loginPanel .card-header { font-size: 1.15rem; padding-bottom: 0.6rem; margin-bottom: 1.1rem; }
+      #loginPanel input { padding: 0.85rem 1rem; font-size: 16px !important; }
+      #loginPanel button { padding: 0.95rem; font-size: 0.95rem; min-height: 48px; }
+
       /* --- Cards --- */
       .card { border-radius: 1rem; padding: 0.95rem; margin-bottom: 1rem; }
       .card-header { font-size: 0.98rem; padding-left: 0.6rem; margin-bottom: 0.85rem; }
@@ -305,7 +322,7 @@
       .input-field label { font-size: 0.78rem; }
       input, select, textarea {
         padding: 0.7rem 0.85rem;
-        font-size: 16px !important; /* prevents iOS zoom on focus */
+        font-size: 16px !important;
         border-radius: 0.65rem;
         min-height: 44px;
       }
@@ -435,6 +452,7 @@
       #userNameSpan { max-width: 130px; }
       .modal-box { width: 98%; padding: 0.85rem; }
       .modal-head h3 { font-size: 0.95rem; }
+      #loginPanel { padding: 1.1rem 0.85rem; }
     }
 
     /* ============================================================ */
@@ -475,7 +493,7 @@
       <input type="text" id="globalSearchInput" placeholder="🔍 Search subjects…" autocomplete="off">
       <div id="searchResults" class="search-results hidden"></div>
     </div>
-    <div class="user-info">
+    <div class="user-info" id="headerUserInfo" style="display:none;">
       <span id="userRoleBadge">Guest</span>
       <span id="userNameSpan">Not logged in</span>
       <button id="globalLogoutBtn" class="logout-btn">Logout</button>
@@ -486,8 +504,8 @@
     <div id="loginPanel" class="card">
       <div class="card-header">Sign in</div>
       <div class="form-grid">
-        <div class="input-field"><label>Email</label><input type="email" id="loginEmail"></div>
-        <div class="input-field"><label>Password</label><input type="password" id="loginPassword"></div>
+        <div class="input-field"><label>Email</label><input type="email" id="loginEmail" autocomplete="email"></div>
+        <div class="input-field"><label>Password</label><input type="password" id="loginPassword" autocomplete="current-password"></div>
         <button id="doLoginBtn" class="primary">Login</button>
       </div>
     </div>
@@ -771,7 +789,7 @@
   function openExamEdit(examId) {
     const exam = DB.exams.find(e => e.id === examId);
     if (!exam) { alert("Exam not found."); return; }
-    editingExam = JSON.parse(JSON.stringify(exam)); // deep copy so we can cancel safely
+    editingExam = JSON.parse(JSON.stringify(exam));
 
     const body = document.getElementById('examEditBody');
     const isPublished = exam.status === 'published';
@@ -1152,11 +1170,13 @@
     const searchWrap = document.getElementById('searchWrapper');
     const searchResults = document.getElementById('searchResults');
     const searchInput = document.getElementById('globalSearchInput');
+    const headerUserInfo = document.getElementById('headerUserInfo');
 
     if (!currentUser) {
       document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
       document.getElementById('loginPanel').style.display = 'block';
       if (searchWrap) searchWrap.style.display = 'none';
+      if (headerUserInfo) headerUserInfo.style.display = 'none';
       if (searchResults) { searchResults.classList.add('hidden'); searchResults.innerHTML = ''; }
       if (searchInput) searchInput.value = '';
       searchResultsCache = [];
@@ -1167,6 +1187,7 @@
 
     document.getElementById('loginPanel').style.display = 'none';
     if (searchWrap) searchWrap.style.display = '';
+    if (headerUserInfo) headerUserInfo.style.display = 'flex';
 
     if (searchInput) {
       if (currentUser.role === 'admin') searchInput.placeholder = '🔍 Search students, teachers, subjects, exams…';
@@ -1268,9 +1289,6 @@
       return assign && teacherSubjects.includes(assign.subjectId);
     });
 
-    // Group exam results into TWO buckets:
-    //   - Mid Term  → quick-bank attempts + scheduled exams tagged 'midterm'
-    //   - Final     → scheduled exams tagged 'final'
     const midtermResults = [];
     const finalResults = [];
     examResults.forEach(r => {
