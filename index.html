@@ -11,7 +11,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: #f1f5f9; padding: 1.5rem; }
     .app-container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1); overflow: hidden; }
-    .app-header { background: #0f2b3d; color: white; padding: 0.9rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
+    .app-header { background: #0f2b3d; color: white; padding: 0.9rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; position: relative; z-index: 1000; }
     .logo h1 { font-size: 1.5rem; font-weight: 600; }
     .logo span { color: #f5b042; }
     .user-info { background: #1e4a62; padding: 0.3rem 1rem; border-radius: 40px; display: flex; gap: 0.8rem; align-items: center; font-size: 0.85rem; }
@@ -65,6 +65,7 @@
       .user-info { justify-content: center; flex-wrap: wrap; }
       .teacher-subj-row { display: flex; flex-direction: column; align-items: flex-start; }
       .teacher-subj-row .checkbox-group { width: 100%; margin-bottom: 0.75rem; }
+      .search-wrapper { width: 100%; max-width: none; }
     }
     @media (min-width: 769px) {
       .form-grid { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; }
@@ -80,12 +81,61 @@
     .eq-input { width: 100%; font-family: monospace; font-size: 0.9rem; padding: 10px; border-radius: 0.7rem; border: 1px solid #cbd5e1; background: #fefefe; }
     .eq-preview { background: #fefce8; border: 1px solid #fde047; border-radius: 1rem; padding: 12px; margin: 10px 0; min-height: 70px; font-size: 1rem; overflow-x: auto; }
     .inline-eq-btn { background: #f5b042; color: #1e2f3a; border: none; border-radius: 20px; padding: 2px 8px; font-size: 0.7rem; margin-left: 8px; cursor: pointer; }
+
+    /* ============ Collapsible cards ============ */
+    .collapsible-header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; user-select: none; }
+    .collapsible-header:hover { color: #b9770e; }
+    .collapse-toggle { font-size: 0.85rem; color: #94a3b8; flex-shrink: 0; }
+    .card.collapsed { padding-bottom: 1.1rem; }
+    .card.collapsed .card-header { margin-bottom: 0; }
+    .card.collapsed .card-body { display: none; }
+    .dash-toolbar { display: flex; gap: 0.5rem; justify-content: flex-end; margin-bottom: 1rem; flex-wrap: wrap; }
+    .dash-toolbar button { background: #e2e8f0; color: #1e293b; }
+    .dash-toolbar button:hover { background: #cbd5e1; }
+
+    /* ============ Global search ============ */
+    .search-wrapper { position: relative; flex: 1 1 240px; max-width: 380px; }
+    #globalSearchInput { width: 100%; padding: 0.45rem 1rem; border-radius: 40px; border: 1px solid #1e4a62; background: #1e4a62; color: #fff; font-size: 0.82rem; outline: none; }
+    #globalSearchInput::placeholder { color: #94a3b8; }
+    #globalSearchInput:focus { background: #ffffff; color: #0f172a; border-color: #f5b042; }
+    #globalSearchInput:focus::placeholder { color: #94a3b8; }
+    .search-results { position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #fff; color: #0f172a; border-radius: 1rem; box-shadow: 0 22px 40px -10px rgba(15,43,61,0.35); max-height: 400px; overflow-y: auto; z-index: 2000; padding: 0.4rem; border: 1px solid #e2e8f0; }
+    .search-item { padding: 0.5rem 0.7rem; border-radius: 0.7rem; cursor: pointer; font-size: 0.8rem; display: flex; justify-content: space-between; gap: 0.5rem; align-items: center; }
+    .search-item:hover { background: #f1f5f9; }
+    .search-type { font-size: 0.62rem; background: #e2e8f0; color: #334155; padding: 0.12rem 0.55rem; border-radius: 1rem; text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
+    .search-empty { padding: 0.8rem; font-size: 0.8rem; color: #64748b; text-align: center; }
+
+    /* ============ Detail / search modal ============ */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.5); z-index: 9000; }
+    .modal-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #fff; border-radius: 1.2rem; width: 92%; max-width: 560px; max-height: 82vh; overflow-y: auto; z-index: 9001; padding: 1.2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+    .modal-box.wide { max-width: 820px; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; gap: 1rem; }
+    .modal-head h3 { font-size: 1.1rem; color: #0f2b3d; }
+    .modal-head button { background: none; border: none; font-size: 1.6rem; line-height: 1; cursor: pointer; color: #334155; padding: 0 0.3rem; }
+    .detail-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px solid #eef2f6; font-size: 0.85rem; }
+    .detail-row > span:first-child { color: #64748b; font-weight: 500; }
+    .detail-row > span:last-child { text-align: right; word-break: break-word; }
+    .detail-section-title { font-weight: 600; margin: 0.9rem 0 0.3rem; font-size: 0.85rem; color: #0f2b3d; }
+
+    /* ============ Promotion panel ============ */
+    .promote-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.7rem; border-bottom: 1px solid #eef2f6; font-size: 0.85rem; border-radius: 0.5rem; cursor: pointer; }
+    .promote-row:hover { background: #f8fafc; }
+    .promote-row small { color: #64748b; }
+    .promote-scroll { max-height: 300px; overflow-y: auto; border: 1px solid #eef2f6; border-radius: 0.8rem; padding: 0.3rem; }
+
+    /* ============ Exam edit modal ============ */
+    .exam-edit-q { border: 1px solid #e2e8f0; border-radius: 0.9rem; padding: 0.8rem; margin-bottom: 0.8rem; background: #fefce8; }
+    .exam-edit-warning { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 0.7rem; padding: 0.5rem 0.8rem; font-size: 0.78rem; color: #92400e; margin-bottom: 0.7rem; }
   </style>
 </head>
 <body>
 <div class="app-container">
   <div class="app-header">
     <div class="logo"><h1>TOP ELECT COLLEGE <span>CBT</span></h1></div>
+    <div class="search-wrapper" id="searchWrapper" style="display:none;">
+      <input type="text" id="globalSearchInput" placeholder="🔍 Search subjects…" autocomplete="off">
+      <div id="searchResults" class="search-results hidden"></div>
+    </div>
     <div class="user-info">
       <span id="userRoleBadge">Guest</span>
       <span id="userNameSpan">Not logged in</span>
@@ -114,6 +164,23 @@
       <div class="card"><div class="card-header">Assign Subjects to Teachers</div><div id="teacherSubjectAssignments"></div></div>
       <div class="card"><div class="card-header">Teachers</div><div class="form-grid"><div class="input-field"><label>Name</label><input id="teacherName"></div><div class="input-field"><label>Email</label><input id="teacherEmail"></div><div class="input-field"><label>Password</label><input id="teacherPass" type="password"></div><button id="createTeacherBtn">Create Teacher</button></div><div id="teachersList"></div></div>
       <div class="card"><div class="card-header">Students</div><div class="form-grid"><div class="input-field"><label>Name</label><input id="studentName"></div><div class="input-field"><label>Email</label><input id="studentEmail"></div><div class="input-field"><label>Class</label><select id="studentClassSelect"></select></div><div class="input-field"><label>Password</label><input id="studentPass" type="password" value="student123"></div><button id="createStudentBtn">Add Student</button></div><div id="studentsList"></div></div>
+
+      <!-- PROMOTION CARD -->
+      <div class="card">
+        <div class="card-header">🎓 Promote / Graduate Students</div>
+        <div class="form-grid">
+          <div class="input-field"><label>From Class</label><select id="promoteFromClass"></select></div>
+          <div class="input-field"><label>To Class</label><select id="promoteToClass"></select></div>
+          <button id="loadPromoteListBtn" class="primary">Load Students</button>
+        </div>
+        <div id="promoteStudentsList"></div>
+        <div class="flex-between mt-2" id="promoteActions" style="display:none;">
+          <label style="font-size:0.8rem; display:flex; align-items:center; gap:0.4rem;"><input type="checkbox" id="promoteSelectAll"> Select all</label>
+          <button id="promoteSelectedBtn" class="primary">🎓 Promote Selected Students</button>
+        </div>
+        <p style="font-size:0.7rem; color:#64748b; margin-top:0.6rem;">Tip: choose “🎓 Graduate (No class)” as the destination to remove students from active classes. A promotion history is stored on each student record.</p>
+      </div>
+
       <div class="card"><div class="card-header">Subject Approval (Approve subjects to make them live)</div><div id="subjectApprovalList"></div></div>
       <div class="card"><div class="card-header">Exam Results</div><div id="adminResultsOverview"></div></div>
       <div class="card"><div class="card-header">Assignment Results</div><div id="adminAssignmentResults"></div></div>
@@ -185,6 +252,26 @@
   </div>
 </div>
 
+<!-- ============ Generic detail modal (used by global search) ============ -->
+<div id="detailOverlay" class="modal-overlay hidden"></div>
+<div id="detailModal" class="modal-box hidden">
+  <div class="modal-head">
+    <h3 id="detailTitle">Details</h3>
+    <button id="closeDetailBtn" type="button">&times;</button>
+  </div>
+  <div id="detailBody"></div>
+</div>
+
+<!-- ============ Exam edit modal (teacher) ============ -->
+<div id="examEditOverlay" class="modal-overlay hidden"></div>
+<div id="examEditModal" class="modal-box wide hidden">
+  <div class="modal-head">
+    <h3>✏️ Edit Exam</h3>
+    <button id="closeExamEditBtn" type="button">&times;</button>
+  </div>
+  <div id="examEditBody"></div>
+</div>
+
 <script type="importmap">
   {
     "imports": {
@@ -221,7 +308,7 @@
   }
 
   function saveUserSession(user) {
-    if (user) localStorage.setItem("cbt_currentUser", JSON.stringify({ id: user.id, name: user.name, email: user.email, role: user.role, classId: user.classId, assignedSubjects: user.assignedSubjects }));
+    if (user) localStorage.setItem("cbt_currentUser", JSON.stringify({ id: user.id, name: user.name, email: user.email, role: user.role, classId: user.classId, assignedSubjects: user.assignedSubjects, graduated: user.graduated }));
     else localStorage.removeItem("cbt_currentUser");
   }
   function loadUserSession() {
@@ -333,11 +420,161 @@
   async function deleteExam(id) { DB.exams = DB.exams.filter(e=>e.id!==id); await deleteDocById("exams", id); }
 
   function getSubjectName(id) { let s = DB.subjects.find(s=>s.id===id); return s ? s.name : "?"; }
-  function getClassLabel(c) { return c.arm ? `${c.className} ${c.arm}` : c.className; }
+  function getClassLabel(c) { if(!c) return "—"; return c.arm ? `${c.className} ${c.arm}` : c.className; }
   function getTeacherName(id) { let t = DB.users.find(u=>u.id===id && u.role==='teacher'); return t ? t.name : "Unknown"; }
-  function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m=> m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+  function escapeHtml(str) { if(str===undefined||str===null) return ''; return String(str).replace(/[&<>"]/g, m=> m==='&'?'&amp;':m==='<'?'&lt;':m==='>'?'&gt;':'&quot;'); }
 
-  // Exam logic and rendering functions
+  // ============================================================
+  // ============ EXAM EDIT MODAL (teacher) =====================
+  // ============================================================
+  let editingExam = null;
+
+  function openExamEdit(examId) {
+    const exam = DB.exams.find(e => e.id === examId);
+    if (!exam) { alert("Exam not found."); return; }
+    editingExam = JSON.parse(JSON.stringify(exam)); // deep copy so we can cancel safely
+
+    const body = document.getElementById('examEditBody');
+    const isPublished = exam.status === 'published';
+    body.innerHTML = `
+      ${isPublished ? `<div class="exam-edit-warning">⚠️ This exam is <strong>published</strong>. Changes will affect students who have not yet taken it.</div>` : ''}
+      <div class="form-grid">
+        <div class="input-field" style="flex:2 1 240px;"><label>Exam Title</label><input id="editExamTitle" value="${escapeHtml(editingExam.title)}"></div>
+        <div class="input-field"><label>Class (any arm)</label><select id="editExamClass">${DB.classes.map(c => `<option value="${c.id}" ${c.id===editingExam.classId?'selected':''}>${escapeHtml(getClassLabel(c))}</option>`).join('')}</select></div>
+        <div class="input-field"><label>Exam Type</label><select id="editExamType">
+          <option value="midterm" ${editingExam.examType==='midterm'?'selected':''}>Mid Term</option>
+          <option value="final" ${editingExam.examType==='final'?'selected':''}>Final Exam</option>
+        </select></div>
+        <div class="input-field"><label>Exam Date &amp; Time</label><input type="datetime-local" id="editExamDateTime" value="${new Date(editingExam.scheduledDateTime).toISOString().slice(0,16)}"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem;">
+        <strong style="font-size:0.9rem;">Questions (<span id="editQCount">${(editingExam.questions||[]).length}</span>)</strong>
+        <button id="addEditExamQuestionBtn" class="small primary" type="button">+ Add Question</button>
+      </div>
+      <div id="editExamQuestions" class="mt-2"></div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
+        <button id="cancelExamEditBtn" class="small" type="button">Cancel</button>
+        <button id="saveExamEditBtn" class="primary" type="button">💾 Save Changes</button>
+      </div>
+      <div id="examEditMsg" class="mt-2" style="font-size:0.8rem;"></div>
+    `;
+
+    renderEditExamQuestions();
+
+    document.getElementById('addEditExamQuestionBtn').onclick = () => {
+      editingExam.questions = editingExam.questions || [];
+      editingExam.questions.push({ text: '', options: ['','','',''], correct: 0 });
+      renderEditExamQuestions();
+    };
+    document.getElementById('cancelExamEditBtn').onclick = closeExamEdit;
+    document.getElementById('saveExamEditBtn').onclick = saveExamEdit;
+
+    document.getElementById('examEditOverlay').classList.remove('hidden');
+    document.getElementById('examEditModal').classList.remove('hidden');
+    document.getElementById('examEditModal').scrollTop = 0;
+  }
+
+  function renderEditExamQuestions() {
+    const container = document.getElementById('editExamQuestions');
+    const questions = editingExam.questions || [];
+    document.getElementById('editQCount').textContent = questions.length;
+    if (!questions.length) {
+      container.innerHTML = '<p style="font-size:0.82rem; color:#64748b; text-align:center; padding:0.8rem;">No questions yet. Click “+ Add Question”.</p>';
+      return;
+    }
+    container.innerHTML = questions.map((q, i) => `
+      <div class="exam-edit-q">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.45rem;">
+          <strong style="font-size:0.82rem;">Question ${i+1}</strong>
+          <button class="small danger remove-edit-q" data-idx="${i}" type="button">Remove</button>
+        </div>
+        <div class="input-field" style="margin-bottom:0.45rem; flex-direction:column; align-items:stretch;">
+          <label>Question Text</label>
+          <input class="edit-q-text" data-idx="${i}" value="${escapeHtml(q.text)}" style="width:100%">
+        </div>
+        <div class="form-grid" style="margin-bottom:0;">
+          <div class="input-field"><label>A</label><input class="edit-q-opt" data-idx="${i}" data-opt="0" value="${escapeHtml(q.options[0]||'')}"></div>
+          <div class="input-field"><label>B</label><input class="edit-q-opt" data-idx="${i}" data-opt="1" value="${escapeHtml(q.options[1]||'')}"></div>
+          <div class="input-field"><label>C</label><input class="edit-q-opt" data-idx="${i}" data-opt="2" value="${escapeHtml(q.options[2]||'')}"></div>
+          <div class="input-field"><label>D</label><input class="edit-q-opt" data-idx="${i}" data-opt="3" value="${escapeHtml(q.options[3]||'')}"></div>
+          <div class="input-field"><label>Correct</label><select class="edit-q-correct" data-idx="${i}">
+            <option value="0" ${q.correct===0?'selected':''}>A</option>
+            <option value="1" ${q.correct===1?'selected':''}>B</option>
+            <option value="2" ${q.correct===2?'selected':''}>C</option>
+            <option value="3" ${q.correct===3?'selected':''}>D</option>
+          </select></div>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('.edit-q-text').forEach(inp => {
+      inp.oninput = () => { editingExam.questions[parseInt(inp.dataset.idx)].text = inp.value; };
+    });
+    container.querySelectorAll('.edit-q-opt').forEach(inp => {
+      inp.oninput = () => {
+        editingExam.questions[parseInt(inp.dataset.idx)].options[parseInt(inp.dataset.opt)] = inp.value;
+      };
+    });
+    container.querySelectorAll('.edit-q-correct').forEach(sel => {
+      sel.onchange = () => { editingExam.questions[parseInt(sel.dataset.idx)].correct = parseInt(sel.value); };
+    });
+    container.querySelectorAll('.remove-edit-q').forEach(btn => {
+      btn.onclick = () => {
+        editingExam.questions.splice(parseInt(btn.dataset.idx), 1);
+        renderEditExamQuestions();
+      };
+    });
+  }
+
+  async function saveExamEdit() {
+    const title = document.getElementById('editExamTitle').value.trim();
+    const classId = document.getElementById('editExamClass').value;
+    const examType = document.getElementById('editExamType').value;
+    const dateTimeStr = document.getElementById('editExamDateTime').value;
+    const msg = document.getElementById('examEditMsg');
+
+    if (!title) { msg.innerHTML = '<span style="color:#c2412c;">❌ Title cannot be empty.</span>'; return; }
+    if (!dateTimeStr) { msg.innerHTML = '<span style="color:#c2412c;">❌ Please set exam date & time.</span>'; return; }
+
+    const qs = editingExam.questions || [];
+    for (let i = 0; i < qs.length; i++) {
+      const q = qs[i];
+      if (!q.text || !q.text.trim() || !q.options[0] || !q.options[1] || !q.options[2] || !q.options[3]) {
+        msg.innerHTML = `<span style="color:#c2412c;">❌ Question ${i+1} is incomplete. All fields required.</span>`;
+        return;
+      }
+    }
+
+    const targetClass = DB.classes.find(c => c.id === classId);
+    const baseClass = targetClass ? targetClass.className : editingExam.baseClass;
+    const examIdx = DB.exams.findIndex(e => e.id === editingExam.id);
+    if (examIdx === -1) { msg.innerHTML = '<span style="color:#c2412c;">❌ Exam not found.</span>'; return; }
+
+    const updated = {
+      ...DB.exams[examIdx],
+      title,
+      classId,
+      baseClass,
+      examType,
+      scheduledDateTime: new Date(dateTimeStr).toISOString(),
+      questions: qs,
+      updatedAt: Date.now()
+    };
+    msg.innerHTML = '<span style="color:#0f2b3d;">⏳ Saving…</span>';
+    await updateExam(updated);
+    msg.innerHTML = '<span style="color:green;">✅ Exam updated successfully.</span>';
+    setTimeout(() => { closeExamEdit(); refreshTeacher(); }, 700);
+  }
+
+  function closeExamEdit() {
+    document.getElementById('examEditOverlay').classList.add('hidden');
+    document.getElementById('examEditModal').classList.add('hidden');
+    editingExam = null;
+  }
+
+  // ============================================================
+  // ============ EXAM TAKING ===================================
+  // ============================================================
   async function startQuickExam(subjectId, resumeData = null) {
     if(activeExamInterval) clearInterval(activeExamInterval);
     if(examSaveInterval) clearInterval(examSaveInterval);
@@ -356,6 +593,8 @@
       timeLeft = (DB.settings.examDurationMinutes || 30) * 60;
     }
     const area = document.getElementById('examArea');
+    area.style.display = 'block';
+    expandCardOf(area);
     function renderQuickExam() {
       let q = questions[currentIdx];
       let optsHtml = q.options.map((opt,idx)=>`<div><label><input type="radio" name="opt" value="${idx}" ${userAnswers[currentIdx]===idx?'checked':''}> ${String.fromCharCode(65+idx)}. ${escapeHtml(opt)}</label></div>`).join('');
@@ -368,54 +607,54 @@
     }
     const saveQuickExamState = () => { saveExamState({ type: 'quick', examId, subjectId, questions: questions.map(q => ({ text:q.text, options:q.options, correct:q.correct })), userAnswers: [...userAnswers], currentIdx, timeLeft }); };
     const finishQuickExam = async () => { if(activeExamInterval) clearInterval(activeExamInterval); if(examSaveInterval) clearInterval(examSaveInterval); let score = 0; userAnswers.forEach((ans,i)=>{ if(ans === questions[i].correct) score++; }); let newId = 'ext'+Date.now()+Math.random(); await addExamTaken({ id:newId, studentId:currentUser.id, examId:examId, subjectId, score, total:questions.length, answers:userAnswers, timestamp:Date.now() }); area.innerHTML = `<div class="card"><h3>✅ Exam Completed</h3><p>Score: ${score}/${questions.length} (${((score/questions.length)*100).toFixed(1)}%)</p><button id="closeExamPanel" class="primary">Close</button></div>`; document.getElementById('closeExamPanel')?.addEventListener('click',()=>{ area.style.display='none'; refreshStudent(); }); clearExamState(); renderStudentExamHistory(); };
-    area.style.display = 'block';
     renderQuickExam();
     examSaveInterval = setInterval(() => saveQuickExamState(), 2000);
     activeExamInterval = setInterval(()=>{ if(timeLeft <= 0){ clearInterval(activeExamInterval); clearInterval(examSaveInterval); finishQuickExam(); } else { timeLeft--; let timerSpan = document.getElementById('examTimer'); if(timerSpan) timerSpan.innerText = `${Math.floor(timeLeft/60)}:${(timeLeft%60).toString().padStart(2,'0')}`; saveQuickExamState(); } }, 1000);
   }
-  
+
   async function startScheduledExam(exam, resumeData = null) {
     if(activeExamInterval) clearInterval(activeExamInterval);
     let questions = exam.questions;
     if(!questions || questions.length === 0) { alert("Exam has no questions."); return; }
     let userAnswers, currentIdx, timeLeft;
-    if(resumeData) { userAnswers = resumeData.userAnswers; currentIdx = resumeData.currentIdx; timeLeft = resumeData.timeLeft; if(userAnswers.length !== questions.length) { userAnswers = new Array(questions.length).fill(-1); currentIdx = 0; timeLeft = (DB.settings.examDurationMinutes || 30) * 60; } } 
+    if(resumeData) { userAnswers = resumeData.userAnswers; currentIdx = resumeData.currentIdx; timeLeft = resumeData.timeLeft; if(userAnswers.length !== questions.length) { userAnswers = new Array(questions.length).fill(-1); currentIdx = 0; timeLeft = (DB.settings.examDurationMinutes || 30) * 60; } }
     else { userAnswers = new Array(questions.length).fill(-1); currentIdx = 0; timeLeft = (DB.settings.examDurationMinutes || 30) * 60; }
     const area = document.getElementById('examArea');
-    const renderExam = () => { let q = questions[currentIdx]; let optsHtml = q.options.map((opt,idx)=>`<div><label><input type="radio" name="opt" value="${idx}" ${userAnswers[currentIdx]===idx?'checked':''}> ${String.fromCharCode(65+idx)}. ${escapeHtml(opt)}</label></div>`).join(''); area.innerHTML = `<div class="card"><div class="flex-between"><span>Time: <strong id="examTimer">${Math.floor(timeLeft/60)}:${(timeLeft%60).toString().padStart(2,'0')}</strong></span><span>${currentIdx+1}/${questions.length}</span></div><h4>${escapeHtml(q.text)}</h4>${optsHtml}<div class="form-grid"><button id="prevExamQ">Previous</button> <button id="nextExamQ">Next</button> <button id="submitExamNow" class="primary">Submit</button></div><div>Palette: ${questions.map((_,i)=>`<button class="small paletteBtn" data-idx="${i}" style="background:${userAnswers[i]!==-1?'#f5b042':'#e2e8f0'};">${i+1}</button>`).join('')}</div></div>`; 
-      document.querySelectorAll('input[name="opt"]').forEach(rad=>rad.addEventListener('change',(e)=>{ userAnswers[currentIdx]=parseInt(e.target.value); saveState(); renderExam(); })); 
-      document.getElementById('prevExamQ')?.addEventListener('click',()=>{ if(currentIdx>0){ currentIdx--; saveState(); renderExam(); } }); 
-      document.getElementById('nextExamQ')?.addEventListener('click',()=>{ if(currentIdx<questions.length-1){ currentIdx++; saveState(); renderExam(); } else alert("Last question – Submit."); }); 
-      document.getElementById('submitExamNow')?.addEventListener('click',()=> finishExam()); 
-      document.querySelectorAll('.paletteBtn').forEach(btn=>btn.addEventListener('click',()=>{ currentIdx=parseInt(btn.dataset.idx); saveState(); renderExam(); })); 
+    area.style.display = 'block';
+    expandCardOf(area);
+    const renderExam = () => { let q = questions[currentIdx]; let optsHtml = q.options.map((opt,idx)=>`<div><label><input type="radio" name="opt" value="${idx}" ${userAnswers[currentIdx]===idx?'checked':''}> ${String.fromCharCode(65+idx)}. ${escapeHtml(opt)}</label></div>`).join(''); area.innerHTML = `<div class="card"><div class="flex-between"><span>Time: <strong id="examTimer">${Math.floor(timeLeft/60)}:${(timeLeft%60).toString().padStart(2,'0')}</strong></span><span>${currentIdx+1}/${questions.length}</span></div><h4>${escapeHtml(q.text)}</h4>${optsHtml}<div class="form-grid"><button id="prevExamQ">Previous</button> <button id="nextExamQ">Next</button> <button id="submitExamNow" class="primary">Submit</button></div><div>Palette: ${questions.map((_,i)=>`<button class="small paletteBtn" data-idx="${i}" style="background:${userAnswers[i]!==-1?'#f5b042':'#e2e8f0'};">${i+1}</button>`).join('')}</div></div>`;
+      document.querySelectorAll('input[name="opt"]').forEach(rad=>rad.addEventListener('change',(e)=>{ userAnswers[currentIdx]=parseInt(e.target.value); saveState(); renderExam(); }));
+      document.getElementById('prevExamQ')?.addEventListener('click',()=>{ if(currentIdx>0){ currentIdx--; saveState(); renderExam(); } });
+      document.getElementById('nextExamQ')?.addEventListener('click',()=>{ if(currentIdx<questions.length-1){ currentIdx++; saveState(); renderExam(); } else alert("Last question – Submit."); });
+      document.getElementById('submitExamNow')?.addEventListener('click',()=> finishExam());
+      document.querySelectorAll('.paletteBtn').forEach(btn=>btn.addEventListener('click',()=>{ currentIdx=parseInt(btn.dataset.idx); saveState(); renderExam(); }));
     };
     const saveState = () => { saveExamState({ type: 'scheduled', examId: exam.id, userAnswers: [...userAnswers], currentIdx, timeLeft }); };
-    const finishExam = async () => { 
-      if(activeExamInterval) clearInterval(activeExamInterval); 
-      if(examSaveInterval) clearInterval(examSaveInterval); 
-      let score = 0; 
-      userAnswers.forEach((ans,i)=>{ if(ans === questions[i].correct) score++; }); 
-      let newId = 'ext'+Date.now()+Math.random(); 
-      await addExamTaken({ id:newId, studentId:currentUser.id, examId:exam.id, subjectId:exam.subjectId, score, total:questions.length, answers:userAnswers, timestamp:Date.now() }); 
-      area.innerHTML = `<div class="card"><h3>Exam completed</h3><p>Score: ${score}/${questions.length} (${((score/questions.length)*100).toFixed(1)}%)</p><button id="closeExamPanel">Close</button></div>`; 
-      document.getElementById('closeExamPanel')?.addEventListener('click',()=>{ area.style.display='none'; refreshStudent(); }); 
-      clearExamState(); 
-      renderStudentExamHistory(); 
+    const finishExam = async () => {
+      if(activeExamInterval) clearInterval(activeExamInterval);
+      if(examSaveInterval) clearInterval(examSaveInterval);
+      let score = 0;
+      userAnswers.forEach((ans,i)=>{ if(ans === questions[i].correct) score++; });
+      let newId = 'ext'+Date.now()+Math.random();
+      await addExamTaken({ id:newId, studentId:currentUser.id, examId:exam.id, subjectId:exam.subjectId, score, total:questions.length, answers:userAnswers, timestamp:Date.now() });
+      area.innerHTML = `<div class="card"><h3>Exam completed</h3><p>Score: ${score}/${questions.length} (${((score/questions.length)*100).toFixed(1)}%)</p><button id="closeExamPanel">Close</button></div>`;
+      document.getElementById('closeExamPanel')?.addEventListener('click',()=>{ area.style.display='none'; refreshStudent(); });
+      clearExamState();
+      renderStudentExamHistory();
     };
-    area.style.display = 'block';
     renderExam();
     examSaveInterval = setInterval(() => saveState(), 2000);
     activeExamInterval = setInterval(()=>{ if(timeLeft <= 0){ clearInterval(activeExamInterval); clearInterval(examSaveInterval); finishExam(); } else { timeLeft--; let timerSpan = document.getElementById('examTimer'); if(timerSpan) timerSpan.innerText = `${Math.floor(timeLeft/60)}:${(timeLeft%60).toString().padStart(2,'0')}`; saveState(); } }, 1000);
   }
-  
-  function resumeExam(savedState) { 
-    if(savedState.type === 'quick') { 
-      startQuickExam(savedState.subjectId, savedState); 
-    } else { 
-      let exam = DB.exams.find(e => e.id === savedState.examId); 
-      if(exam) startScheduledExam(exam, savedState); 
-      else alert("Scheduled exam not found"); 
-    } 
+
+  function resumeExam(savedState) {
+    if(savedState.type === 'quick') {
+      startQuickExam(savedState.subjectId, savedState);
+    } else {
+      let exam = DB.exams.find(e => e.id === savedState.examId);
+      if(exam) startScheduledExam(exam, savedState);
+      else alert("Scheduled exam not found");
+    }
   }
 
   // Teacher panel handlers
@@ -441,7 +680,7 @@
     }
     document.getElementById('examSubmissionSection').style.display = 'block';
   });
-  
+
   document.getElementById('submitExamForApprovalBtn')?.addEventListener('click', async () => {
     let subjectId = document.getElementById('batchSubjectSelect').value;
     if(!subjectId) { alert("Select subject"); return; }
@@ -512,8 +751,9 @@
       extractedWordQuestions = rawQuestions.map((q, idx) => ({ ...q, tempId: idx }));
       renderWordQuestions();
       document.getElementById('wordExamSubmissionSection').style.display = 'block';
-      document.getElementById('docxResultMsg').innerHTML = `<span style="color:green;">✅ Successfully extracted ${extractedWordQuestions.length} potential questions. Edit and select correct answers, then submit exam.</span>`;
-    } catch (err) { console.error(err); document.getElementById('docxResultMsg').innerHTML = `<span style="color:red;">Error parsing file: ${err.message}</span>`; }
+      let msgEl = document.getElementById('docxResultMsg');
+      if (msgEl) msgEl.innerHTML = `<span style="color:green;">✅ Successfully extracted ${extractedWordQuestions.length} potential questions. Edit and select correct answers, then submit exam.</span>`;
+    } catch (err) { console.error(err); let msgEl = document.getElementById('docxResultMsg'); if (msgEl) msgEl.innerHTML = `<span style="color:red;">Error parsing file: ${err.message}</span>`; }
   }
   function renderWordQuestions() {
     let container = document.getElementById('docxQuestionsContainer');
@@ -569,110 +809,713 @@
   });
 
   // All remaining rendering helpers
-  function renderAll() { if (!currentUser) { document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active')); document.getElementById('loginPanel').style.display = 'block'; return; } document.getElementById('loginPanel').style.display = 'none'; ['adminDashboard','teacherDashboard','studentDashboard'].forEach(id => document.getElementById(id).classList.remove('active')); if (currentUser.role === 'admin') { document.getElementById('adminDashboard').classList.add('active'); refreshAdmin(); } else if (currentUser.role === 'teacher') { document.getElementById('teacherDashboard').classList.add('active'); refreshTeacher(); } else { document.getElementById('studentDashboard').classList.add('active'); refreshStudent(); } document.getElementById('userRoleBadge').innerText = currentUser.role.toUpperCase(); document.getElementById('userNameSpan').innerText = currentUser.name; }
-  function refreshAdmin() { document.getElementById('globalTimerMinutes').value = DB.settings.examDurationMinutes; renderSubjectsList(); renderClassesList(); renderClassSubjectAssignments(); renderTeacherSubjectAssignments(); renderTeachersList(); renderStudentsList(); renderSubjectApproval(); renderExamResultsOverview(); renderAssignmentResultsOverview(); renderAdminExamsList(); let sel = document.getElementById('studentClassSelect'); if(sel) sel.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join(''); }
-  function refreshTeacher() { let teacherSubjects = currentUser.assignedSubjects || []; const selects = ['batchSubjectSelect', 'docxSubjectSelect', 'bulkSubjectSelect', 'assignSubjectSelect']; selects.forEach(selId => { let select = document.getElementById(selId); if(select) select.innerHTML = teacherSubjects.map(sid => `<option value="${sid}">${getSubjectName(sid)}</option>`).join(''); if(teacherSubjects.length === 0 && select) select.innerHTML = '<option>No subjects assigned</option>'; }); let classSelect = document.getElementById('examClassSelect'); if(classSelect) classSelect.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join(''); let wordClassSelect = document.getElementById('wordExamClassSelect'); if(wordClassSelect) wordClassSelect.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join(''); let assignClassSelect = document.getElementById('assignClassSelect'); if(assignClassSelect) assignClassSelect.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join(''); renderMyQuestionsBySubject(); renderTeacherAssignments(); renderTeacherAnalytics(); renderTeacherExamsList(); }
-  async function renderTeacherExamsList() { let myExams = DB.exams.filter(e => e.teacherId === currentUser.id); let html = '<table style="width:100%"><thead><tr><th>Title</th><th>Base Class</th><th>Type</th><th>Date</th><th>Status</th></tr></thead><tbody>'; myExams.forEach(e => { let base = e.baseClass || getBaseClassName(e.classId) || 'N/A'; html += `<tr><td>${e.title}</td><td>${base}</td><td>${e.examType}</td><td>${new Date(e.scheduledDateTime).toLocaleString()}</td><td><span class="badge ${e.status}">${e.status}</span></td></tr>`; }); html += '</tbody></table>'; document.getElementById('teacherExamsList').innerHTML = html || '<p>No exams submitted yet.</p>'; }
-  function renderSubjectsList() { let html = '<div style="display:flex; flex-wrap:wrap; gap:0.5rem;">'; DB.subjects.forEach(s => { html += `<span style="background:#f1f5f9; padding:0.2rem 0.6rem; border-radius:1rem;">${s.name} ${s.isGeneral ? '(General)' : ''} <button class="small" data-del-subj="${s.id}">✖</button></span>`; }); html += '</div>'; document.getElementById('subjectsList').innerHTML = html; document.querySelectorAll('[data-del-subj]').forEach(btn => btn.onclick = async () => { let sid = btn.dataset.delSubj; await deleteSubject(sid); DB.classSubjects = DB.classSubjects.filter(cs=>cs.subjectId!==sid); refreshAdmin(); }); }
-  function renderClassesList() { let html = '<div style="display:flex; flex-wrap:wrap; gap:0.5rem;">'; DB.classes.forEach(c => { html += `<span>${getClassLabel(c)} <button class="small" data-del-cls="${c.id}">✖</button></span>`; }); html += '</div>'; document.getElementById('classesList').innerHTML = html; document.querySelectorAll('[data-del-cls]').forEach(btn => btn.onclick = async () => { let cid = btn.dataset.delCls; await deleteClass(cid); DB.classSubjects = DB.classSubjects.filter(cs=>cs.classId!==cid); refreshAdmin(); }); }
-  function renderClassSubjectAssignments() { let html = ''; DB.classes.forEach(c => { const classSubjectEntries = DB.classSubjects.filter(cs => cs.classId === c.id); const uniqueSubjectIds = [...new Map(classSubjectEntries.map(cs => [cs.subjectId, cs])).values()]; const assignedIds = uniqueSubjectIds.map(cs => cs.subjectId); const availableSubjects = DB.subjects.filter(s => !assignedIds.includes(s.id)); html += `<div style="border:1px solid #eef2f6; border-radius:1rem; padding:0.7rem; margin-bottom:0.7rem;"><strong>${getClassLabel(c)}</strong><div>Assigned: ${assignedIds.map(sid => getSubjectName(sid)).join(', ') || 'None'}</div><div class="form-grid mt-2"><div class="input-field"><label>Add Subject</label><select id="addSubjToClass-${c.id}">${availableSubjects.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div><button class="small add-subj-class" data-classid="${c.id}">+</button></div><div>${assignedIds.map(sid => `<button class="small danger remove-cs" data-class="${c.id}" data-subj="${sid}">Remove ${getSubjectName(sid)}</button> `).join('')}</div></div>`; }); document.getElementById('classSubjectAssignments').innerHTML = html; document.querySelectorAll('.add-subj-class').forEach(btn => btn.onclick = async (e) => { let cid = btn.dataset.classid; let sid = document.getElementById(`addSubjToClass-${cid}`).value; if(!sid) return; if (DB.classSubjects.some(cs => cs.classId === cid && cs.subjectId === sid)) { alert("Subject already assigned to this class!"); return; } let newId = 'cs'+Date.now()+Math.random(); let newCS = { id: newId, classId: cid, subjectId: sid }; await addClassSubject(newCS); refreshAdmin(); }); document.querySelectorAll('.remove-cs').forEach(btn => btn.onclick = async () => { let cid = btn.dataset.class; let sid = btn.dataset.subj; let toRemove = DB.classSubjects.find(cs => cs.classId === cid && cs.subjectId === sid); if(toRemove) { DB.classSubjects = DB.classSubjects.filter(cs => cs.id !== toRemove.id); await deleteClassSubject(toRemove.id); refreshAdmin(); } }); }
-  function renderTeacherSubjectAssignments() { const teachers = DB.users.filter(u => u.role === 'teacher'); const subjects = DB.subjects; let html = ''; for (let teacher of teachers) { const assigned = teacher.assignedSubjects || []; html += `<div class="teacher-subj-row"><strong>${teacher.name} (${teacher.email})</strong><div class="checkbox-group" data-teacher-id="${teacher.id}">`; subjects.forEach(subj => { const isChecked = assigned.includes(subj.id); html += `<label style="display:inline-flex; align-items:center; gap:4px;"><input type="checkbox" class="teacher-subj-cb" data-subj="${subj.id}" ${isChecked ? 'checked' : ''}> ${subj.name}</label>`; }); html += `</div><button class="small primary save-teacher-subj" data-teacher="${teacher.id}">Save Subjects</button></div>`; } document.getElementById('teacherSubjectAssignments').innerHTML = html || '<p>No teachers found.</p>'; document.querySelectorAll('.save-teacher-subj').forEach(btn => { btn.onclick = async () => { const teacherId = btn.dataset.teacher; const container = btn.previousElementSibling; const checkboxes = container.querySelectorAll('.teacher-subj-cb:checked'); const selectedSubjects = Array.from(checkboxes).map(cb => cb.dataset.subj); const teacher = DB.users.find(u => u.id === teacherId); if (teacher) { teacher.assignedSubjects = selectedSubjects; await updateUser(teacher); refreshAdmin(); alert(`Updated subjects for ${teacher.name}`); } }; }); }
-  function renderTeachersList() { let teachers = DB.users.filter(u=>u.role==='teacher'); let html='<div>'; teachers.forEach(t=>{html+=`<div class="flex-between"><span>${t.name} (${t.email})</span><button class="small danger" data-del-teacher="${t.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('teachersList').innerHTML=html; document.querySelectorAll('[data-del-teacher]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delTeacher); refreshAdmin();}); }
-  function renderStudentsList() { let students = DB.users.filter(u=>u.role==='student'); let html='<div>'; students.forEach(s=>{ let classObj = DB.classes.find(c=>c.id===s.classId); html+=`<div class="flex-between"><span>${s.name} (${s.email}) - ${classObj ? getClassLabel(classObj) : 'No class'}</span><button class="small danger" data-del-student="${s.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('studentsList').innerHTML=html; document.querySelectorAll('[data-del-student]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delStudent); refreshAdmin();}); }
-  function renderSubjectApproval() { let html='<div class="form-grid">'; DB.subjects.forEach(s=>{html+=`<div><label><input type="checkbox" data-subj-approve="${s.id}" ${s.approved?'checked':''}> ${s.name}</label></div>`;}); html+='</div><button id="saveSubjectApprovalBtn" class="primary">Save Approvals</button>'; document.getElementById('subjectApprovalList').innerHTML=html; document.getElementById('saveSubjectApprovalBtn')?.addEventListener('click',async()=>{for(let cb of document.querySelectorAll('[data-subj-approve]')){let sid=cb.dataset.subjApprove; let subj=DB.subjects.find(s=>s.id===sid); if(subj){subj.approved=cb.checked; await updateSubject(subj);}} refreshAdmin();}); }
-  function renderExamResultsOverview() { let results=DB.examsTaken; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>'; for (let r of results) { let student=DB.users.find(u=>u.id===r.studentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td><button class="small danger delete-exam-result" data-result-id="${r.id}">Delete</button></td>`; } html+='</tbody></table>'; document.getElementById('adminResultsOverview').innerHTML=html||'<p>No exam results.</p>'; document.querySelectorAll('.delete-exam-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshAdmin(); } }); }
-  function renderAssignmentResultsOverview() { let results=DB.assignmentResults; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; results.forEach(r=>{let student=DB.users.find(u=>u.id===r.studentId); let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${student?student.name:'?'}</td><td>${assign?assign.title:'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('adminAssignmentResults').innerHTML=html||'<p>No assignment results.</p>'; }
-  function renderAdminExamsList() { let html = '<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Title</th><th>Teacher</th><th>Subject</th><th>Base Class</th><th>Type</th><th>DateTime</th><th>Status</th><th>Actions</th></tr></thead><tbody>'; for (let exam of DB.exams) { let base = exam.baseClass || getBaseClassName(exam.classId) || 'N/A'; html += `<tr><td>${exam.title}</td><td>${getTeacherName(exam.teacherId)}</td><td>${getSubjectName(exam.subjectId)}</td><td>${base}</td><td>${exam.examType}</td><td>${new Date(exam.scheduledDateTime).toLocaleString()}</td><td><span class="badge ${exam.status}">${exam.status}</span></td><td><button class="small danger" data-del-exam="${exam.id}">Delete</button><button class="small" data-resched-exam="${exam.id}">Reschedule</button>${exam.status === 'pending' ? '<button class="small primary" data-approve-exam="'+exam.id+'">Approve</button>' : ''}${exam.status === 'approved' ? '<button class="small primary" data-publish-exam="'+exam.id+'">Publish</button>' : ''}</td></tr>`; } html += '</tbody></div>'; document.getElementById('adminExamsList').innerHTML = html || '<p>No exams created.</p>'; document.querySelectorAll('[data-del-exam]').forEach(btn => btn.onclick = async () => { await deleteExam(btn.dataset.delExam); refreshAdmin(); }); document.querySelectorAll('[data-resched-exam]').forEach(btn => btn.onclick = async () => { let examId = btn.dataset.reschedExam; let newDateTime = prompt("Enter new date & time (YYYY-MM-DDTHH:MM)", new Date().toISOString().slice(0,16)); if(newDateTime) { let exam = DB.exams.find(e=>e.id===examId); if(exam) { exam.scheduledDateTime = new Date(newDateTime).toISOString(); await updateExam(exam); refreshAdmin(); } } }); document.querySelectorAll('[data-approve-exam]').forEach(btn => btn.onclick = async () => { let exam = DB.exams.find(e=>e.id===btn.dataset.approveExam); if(exam) { exam.status = 'approved'; await updateExam(exam); refreshAdmin(); } }); document.querySelectorAll('[data-publish-exam]').forEach(btn => btn.onclick = async () => { let exam = DB.exams.find(e=>e.id===btn.dataset.publishExam); if(exam) { exam.status = 'published'; await updateExam(exam); alert(`Exam "${exam.title}" is now published for all arms of ${exam.baseClass}.`); } }); }
-  document.getElementById('adminCreateExamBtn')?.addEventListener('click', async () => { let title = prompt("Exam Title:"); if(!title) return; let teacherId = prompt("Teacher ID (enter email or id):"); let teacher = DB.users.find(u => (u.id === teacherId || u.email === teacherId) && u.role === 'teacher'); if(!teacher) { alert("Teacher not found"); return; } let subjectId = prompt("Subject ID:"); if(!DB.subjects.find(s=>s.id===subjectId)) { alert("Subject not found"); return; } let classId = prompt("Class ID (any arm):"); let targetClass = DB.classes.find(c=>c.id===classId); if(!targetClass) { alert("Class not found"); return; } let baseClass = targetClass.className; let examType = prompt("Exam Type (midterm/final):", "midterm"); let dateTimeStr = prompt("Scheduled date (YYYY-MM-DDTHH:MM)", new Date().toISOString().slice(0,16)); let examId = "exam_"+Date.now()+Math.random(); let newExam = { id: examId, title, teacherId: teacher.id, subjectId, classId, baseClass, examType, scheduledDateTime: new Date(dateTimeStr).toISOString(), status: "pending", questions: [], createdAt: Date.now() }; await addExam(newExam); refreshAdmin(); alert("Exam created."); });
-  async function renderMyQuestionsBySubject() { let myQuestions = DB.questions.filter(q => q.teacherId === currentUser.id); let bySubject = {}; myQuestions.forEach(q => { if(!bySubject[q.subjectId]) bySubject[q.subjectId] = []; bySubject[q.subjectId].push(q); }); let container = document.getElementById('myQuestionsBySubject'); container.innerHTML = ''; for(let sid in bySubject) { let subjName = getSubjectName(sid); let div = document.createElement('div'); div.innerHTML = `<div class="collapsible" data-subj="${sid}">📘 ${subjName} (${bySubject[sid].length} questions)</div><div class="questions-list" id="qlist-${sid}"></div>`; container.appendChild(div); let qlistDiv = div.querySelector(`#qlist-${sid}`); bySubject[sid].forEach(q => { let qDiv = document.createElement('div'); qDiv.innerHTML = `<strong>${escapeHtml(q.text)}</strong><br>Options: ${q.options.join(', ')}<br>Correct: ${q.options[q.correct]} <button class="small danger" data-del-q="${q.id}">Delete</button>`; qlistDiv.appendChild(qDiv); }); div.querySelector('.collapsible').addEventListener('click', () => { let content = div.querySelector('.questions-list'); content.style.display = content.style.display === 'block' ? 'none' : 'block'; }); } document.querySelectorAll('[data-del-q]').forEach(btn => btn.onclick = async () => { let qid = btn.dataset.delQ; DB.questions = DB.questions.filter(q => q.id !== qid); await deleteQuestion(qid); refreshTeacher(); }); }
-  function renderTeacherAssignments() { let myAssign = DB.assignments.filter(a => a.teacherId === currentUser.id); let html = '<table style="width:100%"><thead><tr><th>Title</th><th>Subject</th><th>Class</th><th>Questions</th><th>Action</th></tr></thead><tbody>'; myAssign.forEach(a => { html += `<tr><td>${a.title}</td><td>${getSubjectName(a.subjectId)}</td><td>${getClassLabel(DB.classes.find(c=>c.id===a.classId)||{})}</td><td>${a.questions.length}</td><td><button class="small danger" data-del-ass="${a.id}">Delete</button></td>`; }); html += '</tbody></table>'; document.getElementById('teacherAssignmentsList').innerHTML = html; document.querySelectorAll('[data-del-ass]').forEach(btn => btn.onclick = async () => { await deleteAssignment(btn.dataset.delAss); refreshTeacher(); }); }
-  function renderTeacherAnalytics() { let teacherSubjects = currentUser.assignedSubjects || []; let examResults = DB.examsTaken.filter(r => teacherSubjects.includes(r.subjectId)); let assignResults = DB.assignmentResults.filter(r => { let assign = DB.assignments.find(a => a.id === r.assignmentId); return assign && teacherSubjects.includes(assign.subjectId); }); let html = `<div><strong>Exam Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>`; if(examResults.length===0) html += "<tr><td colspan='5'>No exam attempts.</td>"; else examResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td><button class="small danger delete-teacher-result" data-result-id="${r.id}">Delete</button></td>`; }); html += `</tbody></table><strong>Assignment Performance</strong><br><table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>`; if(assignResults.length===0) html += "<tr><td colspan='4'>No assignment attempts.</td>"; else assignResults.forEach(r => { let student = DB.users.find(u => u.id === r.studentId); let assign = DB.assignments.find(a => a.id === r.assignmentId); html += `<tr><td>${student ? student.name : '?'}</td><td>${assign ? assign.title : '?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`; }); html += `</tbody></table></div>`; document.getElementById('teacherAnalytics').innerHTML = html; document.querySelectorAll('.delete-teacher-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshTeacher(); } }); }
-  function refreshStudent() { 
-    let studentClass=currentUser.classId; 
-    let studentBase = getBaseClassName(studentClass); 
-    let availableSubjectIds=DB.classSubjects.filter(cs=>cs.classId===studentClass).map(cs=>cs.subjectId); 
-    let approvedSubjects=DB.subjects.filter(s=>availableSubjectIds.includes(s.id) && s.approved===true); 
-    let subjectSelect=document.getElementById('studentSubjectSelect'); 
-    subjectSelect.innerHTML=approvedSubjects.map(s=>`<option value="${s.id}">${s.name}</option>`).join(''); 
-    if(approvedSubjects.length===0)subjectSelect.innerHTML='<option>No subjects available</option>'; 
-    renderStudentExamHistory(); 
-    renderStudentAssignmentHistory(); 
-    renderAvailableAssignments(); 
-    renderScheduledExamsForStudent(); 
-    const savedExam = loadExamState(); 
-    if(savedExam && savedExam.examId) { 
-      if(confirm("You have an unfinished exam. Resume it?")) { 
-        resumeExam(savedExam); 
-      } else { 
-        clearExamState(); 
-      } 
-    } 
+  function renderAll() {
+    const searchWrap = document.getElementById('searchWrapper');
+    const searchResults = document.getElementById('searchResults');
+    const searchInput = document.getElementById('globalSearchInput');
+
+    if (!currentUser) {
+      document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+      document.getElementById('loginPanel').style.display = 'block';
+      if (searchWrap) searchWrap.style.display = 'none';
+      if (searchResults) { searchResults.classList.add('hidden'); searchResults.innerHTML = ''; }
+      if (searchInput) searchInput.value = '';
+      searchResultsCache = [];
+      return;
+    }
+
+    syncCurrentUser();
+
+    document.getElementById('loginPanel').style.display = 'none';
+    if (searchWrap) searchWrap.style.display = '';
+
+    if (searchInput) {
+      if (currentUser.role === 'admin') searchInput.placeholder = '🔍 Search students, teachers, subjects, exams…';
+      else searchInput.placeholder = '🔍 Search my subjects…';
+    }
+
+    ['adminDashboard','teacherDashboard','studentDashboard'].forEach(id => document.getElementById(id).classList.remove('active'));
+    if (currentUser.role === 'admin') { document.getElementById('adminDashboard').classList.add('active'); refreshAdmin(); }
+    else if (currentUser.role === 'teacher') { document.getElementById('teacherDashboard').classList.add('active'); refreshTeacher(); }
+    else { document.getElementById('studentDashboard').classList.add('active'); refreshStudent(); }
+
+    document.getElementById('userRoleBadge').innerText = currentUser.role.toUpperCase();
+    document.getElementById('userNameSpan').innerText = currentUser.name;
   }
-  
-  function renderScheduledExamsForStudent() { 
-    let studentBase = getBaseClassName(currentUser.classId); 
-    let publishedExams = DB.exams.filter(e => e.status === 'published' && e.baseClass === studentBase); 
-    let now = new Date(); 
-    let html = '<div>'; 
-    for(let exam of publishedExams) { 
-      let examDate = new Date(exam.scheduledDateTime); 
-      let alreadyTaken = DB.examsTaken.some(t => t.examId === exam.id && t.studentId === currentUser.id); 
-      if(alreadyTaken) { 
-        html += `<div class="card"><strong>${exam.title}</strong> (${getSubjectName(exam.subjectId)}) - <span class="badge">Taken</span></div>`; 
-      } else if(now >= examDate) { 
-        html += `<div class="card"><strong>${exam.title}</strong> (${exam.examType}) - ${getSubjectName(exam.subjectId)}<br><button class="primary small start-scheduled-exam" data-exam-id="${exam.id}">Start Exam</button></div>`; 
-      } else { 
-        html += `<div class="card"><strong>${exam.title}</strong> (${exam.examType}) - ${getSubjectName(exam.subjectId)}<br><span class="badge">Available from: ${examDate.toLocaleString()}</span> <button disabled class="primary small">Not yet available</button></div>`; 
-      } 
-    } 
-    html += '</div>'; 
-    document.getElementById('scheduledExamsList').innerHTML = html || '<p>No published exams available for your class.</p>'; 
-    
-    // Use event delegation for start buttons
-    document.querySelectorAll('.start-scheduled-exam').forEach(btn => {
-      btn.onclick = function(e) { 
-        e.preventDefault();
-        let examId = this.dataset.examId; 
-        let exam = DB.exams.find(e => e.id === examId); 
-        if(exam && new Date() >= new Date(exam.scheduledDateTime)) {
-          window.startScheduledExam(exam); 
-        } else { 
-          alert("This exam is not yet available."); 
-        } 
-      }; 
+
+  function syncCurrentUser() {
+    if (!currentUser) return;
+    const fresh = DB.users.find(u => u.id === currentUser.id);
+    if (fresh) {
+      currentUser = { ...currentUser, ...fresh };
+      saveUserSession(currentUser);
+    }
+  }
+
+  function refreshAdmin() {
+    document.getElementById('globalTimerMinutes').value = DB.settings.examDurationMinutes;
+    renderSubjectsList(); renderClassesList(); renderClassSubjectAssignments(); renderTeacherSubjectAssignments();
+    renderTeachersList(); renderStudentsList(); renderSubjectApproval(); renderExamResultsOverview();
+    renderAssignmentResultsOverview(); renderAdminExamsList();
+    renderPromotionPanel();
+    let sel = document.getElementById('studentClassSelect');
+    if(sel) sel.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join('');
+  }
+  function refreshTeacher() {
+    let teacherSubjects = currentUser.assignedSubjects || [];
+    const selects = ['batchSubjectSelect', 'docxSubjectSelect', 'bulkSubjectSelect', 'assignSubjectSelect'];
+    selects.forEach(selId => { let select = document.getElementById(selId); if(select) select.innerHTML = teacherSubjects.map(sid => `<option value="${sid}">${getSubjectName(sid)}</option>`).join(''); if(teacherSubjects.length === 0 && select) select.innerHTML = '<option>No subjects assigned</option>'; });
+    let classSelect = document.getElementById('examClassSelect'); if(classSelect) classSelect.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join('');
+    let wordClassSelect = document.getElementById('wordExamClassSelect'); if(wordClassSelect) wordClassSelect.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join('');
+    let assignClassSelect = document.getElementById('assignClassSelect'); if(assignClassSelect) assignClassSelect.innerHTML = DB.classes.map(c => `<option value="${c.id}">${getClassLabel(c)}</option>`).join('');
+    renderMyQuestionsBySubject(); renderTeacherAssignments(); renderTeacherAnalytics(); renderTeacherExamsList();
+  }
+
+  async function renderTeacherExamsList() {
+    let myExams = DB.exams.filter(e => e.teacherId === currentUser.id);
+    let html = '<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Title</th><th>Base Class</th><th>Type</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+    myExams.forEach(e => {
+      let base = e.baseClass || getBaseClassName(e.classId) || 'N/A';
+      html += `<tr>
+        <td>${escapeHtml(e.title)}</td>
+        <td>${base}</td>
+        <td>${e.examType}</td>
+        <td>${new Date(e.scheduledDateTime).toLocaleString()}</td>
+        <td><span class="badge ${e.status}">${e.status}</span></td>
+        <td>
+          <button class="small primary" data-edit-exam="${e.id}">✏️ Edit</button>
+          <button class="small danger" data-del-exam-teacher="${e.id}">Delete</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table></div>';
+    document.getElementById('teacherExamsList').innerHTML = html || '<p>No exams submitted yet.</p>';
+
+    document.querySelectorAll('[data-edit-exam]').forEach(btn => {
+      btn.onclick = () => openExamEdit(btn.dataset.editExam);
+    });
+    document.querySelectorAll('[data-del-exam-teacher]').forEach(btn => {
+      btn.onclick = async () => {
+        if (confirm("Delete this exam? This cannot be undone.")) {
+          await deleteExam(btn.dataset.delExamTeacher);
+          refreshTeacher();
+        }
+      };
     });
   }
-  
-  function renderAvailableAssignments() { let studentBase = getBaseClassName(currentUser.classId); let assignmentsForBase = DB.assignments.filter(a => a.baseClass === studentBase); let html = '<div>'; for(let a of assignmentsForBase) { html += `<div class="card" style="margin:0.5rem 0;"><strong>${a.title}</strong> (${getSubjectName(a.subjectId)}) - ${a.questions.length} questions <button class="small primary" data-start-ass="${a.id}">Take Assignment</button></div>`; } html += '</div>'; document.getElementById('assignmentsListForStudent').innerHTML = html || '<p>No assignments for your class.</p>'; document.querySelectorAll('[data-start-ass]').forEach(btn=>btn.onclick=()=>startAssignment(btn.dataset.startAss)); }
+
+  function renderSubjectsList() { let html = '<div style="display:flex; flex-wrap:wrap; gap:0.5rem;">'; DB.subjects.forEach(s => { html += `<span style="background:#f1f5f9; padding:0.2rem 0.6rem; border-radius:1rem;">${escapeHtml(s.name)} ${s.isGeneral ? '(General)' : ''} <button class="small" data-del-subj="${s.id}">✖</button></span>`; }); html += '</div>'; document.getElementById('subjectsList').innerHTML = html; document.querySelectorAll('[data-del-subj]').forEach(btn => btn.onclick = async () => { let sid = btn.dataset.delSubj; await deleteSubject(sid); DB.classSubjects = DB.classSubjects.filter(cs=>cs.subjectId!==sid); refreshAdmin(); }); }
+  function renderClassesList() { let html = '<div style="display:flex; flex-wrap:wrap; gap:0.5rem;">'; DB.classes.forEach(c => { html += `<span>${getClassLabel(c)} <button class="small" data-del-cls="${c.id}">✖</button></span>`; }); html += '</div>'; document.getElementById('classesList').innerHTML = html; document.querySelectorAll('[data-del-cls]').forEach(btn => btn.onclick = async () => { let cid = btn.dataset.delCls; await deleteClass(cid); DB.classSubjects = DB.classSubjects.filter(cs=>cs.classId!==cid); refreshAdmin(); }); }
+  function renderClassSubjectAssignments() { let html = ''; DB.classes.forEach(c => { const classSubjectEntries = DB.classSubjects.filter(cs => cs.classId === c.id); const uniqueSubjectIds = [...new Map(classSubjectEntries.map(cs => [cs.subjectId, cs])).values()]; const assignedIds = uniqueSubjectIds.map(cs => cs.subjectId); const availableSubjects = DB.subjects.filter(s => !assignedIds.includes(s.id)); html += `<div style="border:1px solid #eef2f6; border-radius:1rem; padding:0.7rem; margin-bottom:0.7rem;"><strong>${getClassLabel(c)}</strong><div>Assigned: ${assignedIds.map(sid => getSubjectName(sid)).join(', ') || 'None'}</div><div class="form-grid mt-2"><div class="input-field"><label>Add Subject</label><select id="addSubjToClass-${c.id}">${availableSubjects.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}</select></div><button class="small add-subj-class" data-classid="${c.id}">+</button></div><div>${assignedIds.map(sid => `<button class="small danger remove-cs" data-class="${c.id}" data-subj="${sid}">Remove ${getSubjectName(sid)}</button> `).join('')}</div></div>`; }); document.getElementById('classSubjectAssignments').innerHTML = html; document.querySelectorAll('.add-subj-class').forEach(btn => btn.onclick = async (e) => { let cid = btn.dataset.classid; let sid = document.getElementById(`addSubjToClass-${cid}`).value; if(!sid) return; if (DB.classSubjects.some(cs => cs.classId === cid && cs.subjectId === sid)) { alert("Subject already assigned to this class!"); return; } let newId = 'cs'+Date.now()+Math.random(); let newCS = { id: newId, classId: cid, subjectId: sid }; await addClassSubject(newCS); refreshAdmin(); }); document.querySelectorAll('.remove-cs').forEach(btn => btn.onclick = async () => { let cid = btn.dataset.class; let sid = btn.dataset.subj; let toRemove = DB.classSubjects.find(cs => cs.classId === cid && cs.subjectId === sid); if(toRemove) { DB.classSubjects = DB.classSubjects.filter(cs => cs.id !== toRemove.id); await deleteClassSubject(toRemove.id); refreshAdmin(); } }); }
+  function renderTeacherSubjectAssignments() { const teachers = DB.users.filter(u => u.role === 'teacher'); const subjects = DB.subjects; let html = ''; for (let teacher of teachers) { const assigned = teacher.assignedSubjects || []; html += `<div class="teacher-subj-row"><strong>${escapeHtml(teacher.name)} (${escapeHtml(teacher.email)})</strong><div class="checkbox-group" data-teacher-id="${teacher.id}">`; subjects.forEach(subj => { const isChecked = assigned.includes(subj.id); html += `<label style="display:inline-flex; align-items:center; gap:4px;"><input type="checkbox" class="teacher-subj-cb" data-subj="${subj.id}" ${isChecked ? 'checked' : ''}> ${escapeHtml(subj.name)}</label>`; }); html += `</div><button class="small primary save-teacher-subj" data-teacher="${teacher.id}">Save Subjects</button></div>`; } document.getElementById('teacherSubjectAssignments').innerHTML = html || '<p>No teachers found.</p>'; document.querySelectorAll('.save-teacher-subj').forEach(btn => { btn.onclick = async () => { const teacherId = btn.dataset.teacher; const container = btn.previousElementSibling; const checkboxes = container.querySelectorAll('.teacher-subj-cb:checked'); const selectedSubjects = Array.from(checkboxes).map(cb => cb.dataset.subj); const teacher = DB.users.find(u => u.id === teacherId); if (teacher) { teacher.assignedSubjects = selectedSubjects; await updateUser(teacher); refreshAdmin(); alert(`Updated subjects for ${teacher.name}`); } }; }); }
+  function renderTeachersList() { let teachers = DB.users.filter(u=>u.role==='teacher'); let html='<div>'; teachers.forEach(t=>{html+=`<div class="flex-between"><span>${escapeHtml(t.name)} (${escapeHtml(t.email)})</span><button class="small danger" data-del-teacher="${t.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('teachersList').innerHTML=html; document.querySelectorAll('[data-del-teacher]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delTeacher); refreshAdmin();}); }
+  function renderStudentsList() { let students = DB.users.filter(u=>u.role==='student'); let html='<div>'; students.forEach(s=>{ let classObj = DB.classes.find(c=>c.id===s.classId); let clsLabel = classObj ? getClassLabel(classObj) : (s.graduated ? '🎓 Graduated' : 'No class'); html+=`<div class="flex-between"><span>${escapeHtml(s.name)} (${escapeHtml(s.email)}) - ${clsLabel}</span><button class="small danger" data-del-student="${s.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('studentsList').innerHTML=html; document.querySelectorAll('[data-del-student]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delStudent); refreshAdmin();}); }
+  function renderSubjectApproval() { let html='<div class="form-grid">'; DB.subjects.forEach(s=>{html+=`<div><label><input type="checkbox" data-subj-approve="${s.id}" ${s.approved?'checked':''}> ${escapeHtml(s.name)}</label></div>`;}); html+='</div><button id="saveSubjectApprovalBtn" class="primary">Save Approvals</button>'; document.getElementById('subjectApprovalList').innerHTML=html; document.getElementById('saveSubjectApprovalBtn')?.addEventListener('click',async()=>{for(let cb of document.querySelectorAll('[data-subj-approve]')){let sid=cb.dataset.subjApprove; let subj=DB.subjects.find(s=>s.id===sid); if(subj){subj.approved=cb.checked; await updateSubject(subj);}} refreshAdmin();}); }
+  function renderExamResultsOverview() { let results=DB.examsTaken; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>'; for (let r of results) { let student=DB.users.find(u=>u.id===r.studentId); html+=`<tr><td>${student?escapeHtml(student.name):'?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td><button class="small danger delete-exam-result" data-result-id="${r.id}">Delete</button></td>`; } html+='</tbody></table>'; document.getElementById('adminResultsOverview').innerHTML=html||'<p>No exam results.</p>'; document.querySelectorAll('.delete-exam-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshAdmin(); } }); }
+  function renderAssignmentResultsOverview() { let results=DB.assignmentResults; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; results.forEach(r=>{let student=DB.users.find(u=>u.id===r.studentId); let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${student?escapeHtml(student.name):'?'}</td><td>${assign?escapeHtml(assign.title):'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('adminAssignmentResults').innerHTML=html||'<p>No assignment results.</p>'; }
+  function renderAdminExamsList() { let html = '<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Title</th><th>Teacher</th><th>Subject</th><th>Base Class</th><th>Type</th><th>DateTime</th><th>Status</th><th>Actions</th></tr></thead><tbody>'; for (let exam of DB.exams) { let base = exam.baseClass || getBaseClassName(exam.classId) || 'N/A'; html += `<tr><td>${escapeHtml(exam.title)}</td><td>${getTeacherName(exam.teacherId)}</td><td>${getSubjectName(exam.subjectId)}</td><td>${base}</td><td>${exam.examType}</td><td>${new Date(exam.scheduledDateTime).toLocaleString()}</td><td><span class="badge ${exam.status}">${exam.status}</span></td><td><button class="small danger" data-del-exam="${exam.id}">Delete</button><button class="small" data-resched-exam="${exam.id}">Reschedule</button>${exam.status === 'pending' ? '<button class="small primary" data-approve-exam="'+exam.id+'">Approve</button>' : ''}${exam.status === 'approved' ? '<button class="small primary" data-publish-exam="'+exam.id+'">Publish</button>' : ''}</td></tr>`; } html += '</tbody></div>'; document.getElementById('adminExamsList').innerHTML = html || '<p>No exams created.</p>'; document.querySelectorAll('[data-del-exam]').forEach(btn => btn.onclick = async () => { await deleteExam(btn.dataset.delExam); refreshAdmin(); }); document.querySelectorAll('[data-resched-exam]').forEach(btn => btn.onclick = async () => { let examId = btn.dataset.reschedExam; let newDateTime = prompt("Enter new date & time (YYYY-MM-DDTHH:MM)", new Date().toISOString().slice(0,16)); if(newDateTime) { let exam = DB.exams.find(e=>e.id===examId); if(exam) { exam.scheduledDateTime = new Date(newDateTime).toISOString(); await updateExam(exam); refreshAdmin(); } } }); document.querySelectorAll('[data-approve-exam]').forEach(btn => btn.onclick = async () => { let exam = DB.exams.find(e=>e.id===btn.dataset.approveExam); if(exam) { exam.status = 'approved'; await updateExam(exam); refreshAdmin(); } }); document.querySelectorAll('[data-publish-exam]').forEach(btn => btn.onclick = async () => { let exam = DB.exams.find(e=>e.id===btn.dataset.publishExam); if(exam) { exam.status = 'published'; await updateExam(exam); alert(`Exam "${exam.title}" is now published for all arms of ${exam.baseClass}.`); refreshAdmin(); } }); }
+  document.getElementById('adminCreateExamBtn')?.addEventListener('click', async () => { let title = prompt("Exam Title:"); if(!title) return; let teacherId = prompt("Teacher ID (enter email or id):"); let teacher = DB.users.find(u => (u.id === teacherId || u.email === teacherId) && u.role === 'teacher'); if(!teacher) { alert("Teacher not found"); return; } let subjectId = prompt("Subject ID:"); if(!DB.subjects.find(s=>s.id===subjectId)) { alert("Subject not found"); return; } let classId = prompt("Class ID (any arm):"); let targetClass = DB.classes.find(c=>c.id===classId); if(!targetClass) { alert("Class not found"); return; } let baseClass = targetClass.className; let examType = prompt("Exam Type (midterm/final):", "midterm"); let dateTimeStr = prompt("Scheduled date (YYYY-MM-DDTHH:MM)", new Date().toISOString().slice(0,16)); let examId = "exam_"+Date.now()+Math.random(); let newExam = { id: examId, title, teacherId: teacher.id, subjectId, classId, baseClass, examType, scheduledDateTime: new Date(dateTimeStr).toISOString(), status: "pending", questions: [], createdAt: Date.now() }; await addExam(newExam); refreshAdmin(); alert("Exam created."); });
+  async function renderMyQuestionsBySubject() { let myQuestions = DB.questions.filter(q => q.teacherId === currentUser.id); let bySubject = {}; myQuestions.forEach(q => { if(!bySubject[q.subjectId]) bySubject[q.subjectId] = []; bySubject[q.subjectId].push(q); }); let container = document.getElementById('myQuestionsBySubject'); container.innerHTML = ''; for(let sid in bySubject) { let subjName = getSubjectName(sid); let div = document.createElement('div'); div.innerHTML = `<div class="collapsible" data-subj="${sid}">📘 ${escapeHtml(subjName)} (${bySubject[sid].length} questions)</div><div class="questions-list" id="qlist-${sid}"></div>`; container.appendChild(div); let qlistDiv = div.querySelector(`#qlist-${sid}`); bySubject[sid].forEach(q => { let qDiv = document.createElement('div'); qDiv.innerHTML = `<strong>${escapeHtml(q.text)}</strong><br>Options: ${q.options.map(escapeHtml).join(', ')}<br>Correct: ${escapeHtml(q.options[q.correct])} <button class="small danger" data-del-q="${q.id}">Delete</button>`; qlistDiv.appendChild(qDiv); }); div.querySelector('.collapsible').addEventListener('click', () => { let content = div.querySelector('.questions-list'); content.style.display = content.style.display === 'block' ? 'none' : 'block'; }); } document.querySelectorAll('[data-del-q]').forEach(btn => btn.onclick = async () => { let qid = btn.dataset.delQ; DB.questions = DB.questions.filter(q => q.id !== qid); await deleteQuestion(qid); refreshTeacher(); }); }
+  function renderTeacherAssignments() { let myAssign = DB.assignments.filter(a => a.teacherId === currentUser.id); let html = '<table style="width:100%"><thead><tr><th>Title</th><th>Subject</th><th>Class</th><th>Questions</th><th>Action</th></tr></thead><tbody>'; myAssign.forEach(a => { html += `<tr><td>${escapeHtml(a.title)}</td><td>${getSubjectName(a.subjectId)}</td><td>${getClassLabel(DB.classes.find(c=>c.id===a.classId))}</td><td>${a.questions.length}</td><td><button class="small danger" data-del-ass="${a.id}">Delete</button></td></tr>`; }); html += '</tbody></table>'; document.getElementById('teacherAssignmentsList').innerHTML = html; document.querySelectorAll('[data-del-ass]').forEach(btn => btn.onclick = async () => { await deleteAssignment(btn.dataset.delAss); refreshTeacher(); }); }
+
+  // ============================================================
+  // ====== TEACHER ANALYTICS — MIDTERM / FINAL SEPARATED =======
+  // ============================================================
+  function renderTeacherAnalytics() {
+    const teacherSubjects = currentUser.assignedSubjects || [];
+    const examResults = DB.examsTaken.filter(r => teacherSubjects.includes(r.subjectId));
+    const assignResults = DB.assignmentResults.filter(r => {
+      let assign = DB.assignments.find(a => a.id === r.assignmentId);
+      return assign && teacherSubjects.includes(assign.subjectId);
+    });
+
+    // Group exam results into TWO buckets:
+    //   - Mid Term  → quick-bank attempts + scheduled exams tagged 'midterm'
+    //   - Final     → scheduled exams tagged 'final'
+    const midtermResults = [];
+    const finalResults = [];
+    examResults.forEach(r => {
+      if (r.examId && String(r.examId).startsWith('quick_')) {
+        midtermResults.push(r);
+        return;
+      }
+      const exam = DB.exams.find(e => e.id === r.examId);
+      if (exam && exam.examType === 'final') {
+        finalResults.push(r);
+      } else {
+        midtermResults.push(r);
+      }
+    });
+
+    const buildExamTable = (results, emptyMsg) => {
+      let h = `<table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>`;
+      if (results.length === 0) h += `<tr><td colspan="5">${emptyMsg}</td></tr>`;
+      else results.forEach(r => {
+        const student = DB.users.find(u => u.id === r.studentId);
+        h += `<tr>
+                <td>${student ? escapeHtml(student.name) : '?'}</td>
+                <td>${getSubjectName(r.subjectId)}</td>
+                <td>${r.score}/${r.total}</td>
+                <td>${new Date(r.timestamp).toLocaleString()}</td>
+                <td><button class="small danger delete-teacher-result" data-result-id="${r.id}">Delete</button></td>
+              </tr>`;
+      });
+      h += `</tbody></table>`;
+      return h;
+    };
+
+    const buildAssignTable = (results) => {
+      let h = `<table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>`;
+      if (results.length === 0) h += `<tr><td colspan="4">No assignment attempts.</td></tr>`;
+      else results.forEach(r => {
+        const student = DB.users.find(u => u.id === r.studentId);
+        const assign = DB.assignments.find(a => a.id === r.assignmentId);
+        h += `<tr>
+                <td>${student ? escapeHtml(student.name) : '?'}</td>
+                <td>${assign ? escapeHtml(assign.title) : '?'}</td>
+                <td>${r.score}/${r.total}</td>
+                <td>${new Date(r.timestamp).toLocaleString()}</td>
+              </tr>`;
+      });
+      h += `</tbody></table>`;
+      return h;
+    };
+
+    const html = `
+      <div>
+        <div style="margin-bottom:1.2rem;">
+          <strong style="color:#b45309;">📝 Mid Term Exam Performance (${midtermResults.length})</strong><br>
+          ${buildExamTable(midtermResults, 'No mid-term attempts.')}
+        </div>
+        <div style="margin-bottom:1.2rem;">
+          <strong style="color:#065f46;">🎓 Final Exam Performance (${finalResults.length})</strong><br>
+          ${buildExamTable(finalResults, 'No final exam attempts.')}
+        </div>
+        <div>
+          <strong>📚 Assignment Performance</strong><br>
+          ${buildAssignTable(assignResults)}
+        </div>
+      </div>
+    `;
+
+    document.getElementById('teacherAnalytics').innerHTML = html;
+
+    document.querySelectorAll('.delete-teacher-result').forEach(btn => btn.onclick = async () => {
+      if (confirm("Delete this exam result?")) {
+        await deleteExamTaken(btn.dataset.resultId);
+        refreshTeacher();
+      }
+    });
+  }
+
+  function refreshStudent() {
+    let studentClass=currentUser.classId;
+    let availableSubjectIds=DB.classSubjects.filter(cs=>cs.classId===studentClass).map(cs=>cs.subjectId);
+    let approvedSubjects=DB.subjects.filter(s=>availableSubjectIds.includes(s.id) && s.approved===true);
+    let subjectSelect=document.getElementById('studentSubjectSelect');
+    subjectSelect.innerHTML=approvedSubjects.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
+    if(approvedSubjects.length===0) subjectSelect.innerHTML = '<option value="">' + (currentUser.graduated ? 'You have graduated 🎓' : 'No subjects available') + '</option>';
+    renderStudentExamHistory();
+    renderStudentAssignmentHistory();
+    renderAvailableAssignments();
+    renderScheduledExamsForStudent();
+    const savedExam = loadExamState();
+    if(savedExam && savedExam.examId) {
+      if(confirm("You have an unfinished exam. Resume it?")) {
+        resumeExam(savedExam);
+      } else {
+        clearExamState();
+      }
+    }
+  }
+
+  function renderScheduledExamsForStudent() {
+    let studentBase = getBaseClassName(currentUser.classId);
+    let publishedExams = studentBase ? DB.exams.filter(e => e.status === 'published' && e.baseClass === studentBase) : [];
+    let now = new Date();
+    let html = '<div>';
+    for(let exam of publishedExams) {
+      let examDate = new Date(exam.scheduledDateTime);
+      let alreadyTaken = DB.examsTaken.some(t => t.examId === exam.id && t.studentId === currentUser.id);
+      if(alreadyTaken) {
+        html += `<div class="card"><strong>${escapeHtml(exam.title)}</strong> (${getSubjectName(exam.subjectId)}) - <span class="badge">Taken</span></div>`;
+      } else if(now >= examDate) {
+        html += `<div class="card"><strong>${escapeHtml(exam.title)}</strong> (${exam.examType}) - ${getSubjectName(exam.subjectId)}<br><button class="primary small start-scheduled-exam" data-exam-id="${exam.id}">Start Exam</button></div>`;
+      } else {
+        html += `<div class="card"><strong>${escapeHtml(exam.title)}</strong> (${exam.examType}) - ${getSubjectName(exam.subjectId)}<br><span class="badge">Available from: ${examDate.toLocaleString()}</span> <button disabled class="primary small">Not yet available</button></div>`;
+      }
+    }
+    html += '</div>';
+    document.getElementById('scheduledExamsList').innerHTML = html || '<p>No published exams available for your class.</p>';
+
+    document.querySelectorAll('.start-scheduled-exam').forEach(btn => {
+      btn.onclick = function(e) {
+        e.preventDefault();
+        let examId = this.dataset.examId;
+        let exam = DB.exams.find(e => e.id === examId);
+        if(exam && new Date() >= new Date(exam.scheduledDateTime)) {
+          window.startScheduledExam(exam);
+        } else {
+          alert("This exam is not yet available.");
+        }
+      };
+    });
+  }
+
+  function renderAvailableAssignments() { let studentBase = getBaseClassName(currentUser.classId); let assignmentsForBase = studentBase ? DB.assignments.filter(a => a.baseClass === studentBase) : []; let html = '<div>'; for(let a of assignmentsForBase) { html += `<div class="card" style="margin:0.5rem 0;"><strong>${escapeHtml(a.title)}</strong> (${getSubjectName(a.subjectId)}) - ${a.questions.length} questions <button class="small primary" data-start-ass="${a.id}">Take Assignment</button></div>`; } html += '</div>'; document.getElementById('assignmentsListForStudent').innerHTML = html || '<p>No assignments for your class.</p>'; document.querySelectorAll('[data-start-ass]').forEach(btn=>btn.onclick=()=>startAssignment(btn.dataset.startAss)); }
   async function startAssignment(assignId){ alert("Assignment taking feature active."); }
   function renderStudentExamHistory() { let myExams=DB.examsTaken.filter(e=>e.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Subject</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myExams.forEach(e=>{html+=`<tr><td>${getSubjectName(e.subjectId)}</td><td>${e.score}/${e.total}</td><td>${new Date(e.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentResultsHistory').innerHTML=html||'<p>No exams taken.</p>'; }
-  function renderStudentAssignmentHistory() { let myResults=DB.assignmentResults.filter(r=>r.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myResults.forEach(r=>{let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${assign?assign.title:'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentAssignmentResults').innerHTML=html||'<p>No assignments attempted.</p>'; }
+  function renderStudentAssignmentHistory() { let myResults=DB.assignmentResults.filter(r=>r.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myResults.forEach(r=>{let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${assign?escapeHtml(assign.title):'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentAssignmentResults').innerHTML=html||'<p>No assignments attempted.</p>'; }
   document.getElementById('doLoginBtn')?.addEventListener('click', async () => { let email=document.getElementById('loginEmail').value; let pwd=document.getElementById('loginPassword').value; let user=DB.users.find(u=>u.email===email&&u.password===pwd); if(user){ currentUser=user; saveUserSession(user); renderAll(); } else alert("Invalid credentials."); });
-  document.getElementById('globalLogoutBtn')?.addEventListener('click',()=>{ if(activeExamInterval)clearInterval(activeExamInterval); if(examSaveInterval)clearInterval(examSaveInterval); currentUser=null; saveUserSession(null); clearExamState(); renderAll(); });
+
+  document.getElementById('globalLogoutBtn')?.addEventListener('click',()=>{
+    if(activeExamInterval)clearInterval(activeExamInterval);
+    if(examSaveInterval)clearInterval(examSaveInterval);
+    currentUser=null; saveUserSession(null); clearExamState();
+    const si = document.getElementById('globalSearchInput');
+    if (si) si.value = '';
+    document.getElementById('searchResults')?.classList.add('hidden');
+    renderAll();
+  });
+
   document.getElementById('saveTimerBtn')?.addEventListener('click', async () => { let mins=parseInt(document.getElementById('globalTimerMinutes').value); if(mins>0){ DB.settings.examDurationMinutes=mins; await updateSettings(DB.settings); alert("Timer updated."); } });
   document.getElementById('createSubjectBtn')?.addEventListener('click', async () => { let name=document.getElementById('newSubjectName').value.trim(); let isGeneral=document.getElementById('isGeneralSubject').checked; if(name){ let newId='sub'+Date.now(); let newSubj={id:newId,name,isGeneral,approved:false}; await addSubject(newSubj); if(isGeneral){ for(let c of DB.classes){ if(!DB.classSubjects.some(cs=>cs.classId===c.id&&cs.subjectId===newId)){ let csId='cs'+Date.now()+Math.random(); await addClassSubject({id:csId,classId:c.id,subjectId:newId}); } } } refreshAdmin(); document.getElementById('newSubjectName').value=''; document.getElementById('isGeneralSubject').checked=false; } });
   document.getElementById('addClassBtn')?.addEventListener('click', async () => { let className=document.getElementById('classNameInput').value.trim(); let arm=document.getElementById('classArmInput').value.trim(); if(className){ let newId='cls'+Date.now(); let newClass={id:newId,className,arm}; await addClass(newClass); for(let s of DB.subjects.filter(s=>s.isGeneral)){ if(!DB.classSubjects.some(cs=>cs.classId===newId&&cs.subjectId===s.id)){ let csId='cs'+Date.now()+Math.random(); await addClassSubject({id:csId,classId:newId,subjectId:s.id}); } } refreshAdmin(); document.getElementById('classNameInput').value=''; document.getElementById('classArmInput').value=''; } });
   document.getElementById('createTeacherBtn')?.addEventListener('click', async () => { let name=document.getElementById('teacherName').value.trim(); let email=document.getElementById('teacherEmail').value.trim(); let pwd=document.getElementById('teacherPass').value; if(name&&email&&pwd){ let newId='t'+Date.now(); let newTeacher={id:newId,name,email,password:pwd,role:'teacher',assignedSubjects:[]}; await addUser(newTeacher); refreshAdmin(); document.getElementById('teacherName').value=''; document.getElementById('teacherEmail').value=''; document.getElementById('teacherPass').value=''; } else alert("Fill all fields"); });
   document.getElementById('createStudentBtn')?.addEventListener('click', async () => { let name=document.getElementById('studentName').value.trim(); let email=document.getElementById('studentEmail').value.trim(); let classId=document.getElementById('studentClassSelect').value; let pwd=document.getElementById('studentPass').value; if(name&&email&&classId&&pwd){ let newId='s'+Date.now(); let newStudent={id:newId,name,email,password:pwd,role:'student',classId}; await addUser(newStudent); refreshAdmin(); document.getElementById('studentName').value=''; document.getElementById('studentEmail').value=''; document.getElementById('studentPass').value='student123'; } else alert("Fill all fields"); });
   document.getElementById('changeAdminPassBtn')?.addEventListener('click', async () => { if(currentUser?.role==='admin'){ let newPass=document.getElementById('adminNewPass').value.trim(); if(newPass){ currentUser.password=newPass; await updateUser(currentUser); alert("Password changed."); document.getElementById('adminNewPass').value=''; } else alert("Enter new password."); } });
-  
-  // FIX: Expose functions globally so buttons can use them
+
+  // ============================================================
+  // ============ STUDENT PROMOTION =============================
+  // ============================================================
+  function renderPromotionPanel() {
+    const fromSel = document.getElementById('promoteFromClass');
+    const toSel = document.getElementById('promoteToClass');
+    if (!fromSel || !toSel) return;
+    const prevFrom = fromSel.value;
+    const prevTo = toSel.value;
+    fromSel.innerHTML = DB.classes.map(c => `<option value="${c.id}">${escapeHtml(getClassLabel(c))}</option>`).join('');
+    toSel.innerHTML = DB.classes.map(c => `<option value="${c.id}">${escapeHtml(getClassLabel(c))}</option>`).join('') +
+                      '<option value="__GRADUATE__">🎓 Graduate (No class)</option>';
+    if (prevFrom && DB.classes.some(c => c.id === prevFrom)) fromSel.value = prevFrom;
+    if (prevTo && (DB.classes.some(c => c.id === prevTo) || prevTo === '__GRADUATE__')) toSel.value = prevTo;
+    if (document.getElementById('promoteStudentsList').dataset.loaded === '1') {
+      document.getElementById('loadPromoteListBtn')?.click();
+    }
+  }
+
+  document.getElementById('loadPromoteListBtn')?.addEventListener('click', () => {
+    const fromId = document.getElementById('promoteFromClass').value;
+    const container = document.getElementById('promoteStudentsList');
+    const actions = document.getElementById('promoteActions');
+    const students = DB.users.filter(u => u.role === 'student' && u.classId === fromId);
+    container.dataset.loaded = '1';
+    if (!students.length) {
+      container.innerHTML = '<p style="font-size:0.82rem; color:#64748b;">No students found in this class.</p>';
+      actions.style.display = 'none';
+      return;
+    }
+    container.innerHTML = `<div class="promote-scroll">` + students.map(s => `
+      <label class="promote-row">
+        <input type="checkbox" class="promote-cb" value="${s.id}">
+        <span>${escapeHtml(s.name)} <small>(${escapeHtml(s.email)})</small></span>
+      </label>`).join('') + `</div>`;
+    actions.style.display = 'flex';
+    const selectAll = document.getElementById('promoteSelectAll');
+    selectAll.checked = false;
+    selectAll.onchange = () => {
+      document.querySelectorAll('.promote-cb').forEach(cb => cb.checked = selectAll.checked);
+    };
+  });
+
+  document.getElementById('promoteSelectedBtn')?.addEventListener('click', async () => {
+    const fromId = document.getElementById('promoteFromClass').value;
+    const toId = document.getElementById('promoteToClass').value;
+    const selected = Array.from(document.querySelectorAll('.promote-cb:checked')).map(cb => cb.value);
+    if (!selected.length) { alert("Please select at least one student to promote."); return; }
+    if (toId === fromId) { alert("Source class and destination class are the same."); return; }
+    const toClass = DB.classes.find(c => c.id === toId);
+    const fromClass = DB.classes.find(c => c.id === fromId);
+    const destLabel = toId === '__GRADUATE__' ? 'Graduated' : getClassLabel(toClass);
+    if (!confirm(`Promote ${selected.length} student(s) from ${getClassLabel(fromClass)} to ${destLabel}?`)) return;
+
+    for (const sid of selected) {
+      const st = DB.users.find(u => u.id === sid);
+      if (!st) continue;
+      st.promotionHistory = st.promotionHistory || [];
+      st.promotionHistory.push({
+        from: fromClass ? getClassLabel(fromClass) : 'N/A',
+        to: destLabel,
+        date: Date.now()
+      });
+      if (toId === '__GRADUATE__') { st.classId = null; st.graduated = true; }
+      else { st.classId = toId; st.graduated = false; }
+      await updateUser(st);
+    }
+    alert(`✅ ${selected.length} student(s) promoted to ${destLabel}.`);
+    document.getElementById('promoteStudentsList').dataset.loaded = '0';
+    document.getElementById('promoteStudentsList').innerHTML = '';
+    document.getElementById('promoteActions').style.display = 'none';
+    refreshAdmin();
+  });
+
+  // ============================================================
+  // ====== EXPAND / COLLAPSE DASHBOARD CARDS ==================
+  // ============================================================
+  function getCollapsedSet(role) {
+    try { return new Set(JSON.parse(localStorage.getItem('cbt_collapsed_' + role) || '[]')); }
+    catch (e) { return new Set(); }
+  }
+  function saveCollapsedSet(role, set) {
+    try { localStorage.setItem('cbt_collapsed_' + role, JSON.stringify([...set])); } catch (e) {}
+  }
+
+  function expandCardOf(el) {
+    if (!el) return;
+    const card = el.closest('.card');
+    if (card && card.classList.contains('collapsed')) {
+      card.classList.remove('collapsed');
+      const t = card.querySelector('.collapse-toggle');
+      if (t) t.textContent = '▾';
+    }
+  }
+
+  function makeCardsCollapsible(rootId) {
+    const root = document.getElementById(rootId);
+    if (!root || root.dataset.collapseReady === '1') return;
+    root.dataset.collapseReady = '1';
+    const role = rootId;
+    const collapsedSet = getCollapsedSet(role);
+
+    Array.from(root.children).forEach(card => {
+      if (!card.classList || !card.classList.contains('card')) return;
+      const header = card.querySelector(':scope > .card-header');
+      if (!header) return;
+      const key = header.textContent.trim();
+      card.dataset.collapseKey = key;
+
+      const body = document.createElement('div');
+      body.className = 'card-body';
+      let node = header.nextSibling;
+      while (node) { const next = node.nextSibling; body.appendChild(node); node = next; }
+      card.appendChild(body);
+
+      const toggle = document.createElement('span');
+      toggle.className = 'collapse-toggle';
+      toggle.textContent = collapsedSet.has(key) ? '▸' : '▾';
+      header.appendChild(toggle);
+      header.classList.add('collapsible-header');
+      header.title = 'Click to expand / collapse this section';
+
+      header.addEventListener('click', () => {
+        const isCollapsed = card.classList.toggle('collapsed');
+        toggle.textContent = isCollapsed ? '▸' : '▾';
+        const set = getCollapsedSet(role);
+        if (isCollapsed) set.add(key); else set.delete(key);
+        saveCollapsedSet(role, set);
+      });
+
+      if (collapsedSet.has(key)) card.classList.add('collapsed');
+    });
+
+    if (!root.querySelector('.dash-toolbar')) {
+      const bar = document.createElement('div');
+      bar.className = 'dash-toolbar';
+      bar.innerHTML = `<button class="small" data-mode="expand">⊞ Expand all</button><button class="small" data-mode="collapse">⊟ Collapse all</button>`;
+      const h2 = root.querySelector('h2');
+      if (h2) h2.insertAdjacentElement('afterend', bar);
+      else root.insertBefore(bar, root.firstChild);
+      bar.querySelectorAll('button').forEach(b => {
+        b.addEventListener('click', () => {
+          const collapse = b.dataset.mode === 'collapse';
+          const set = new Set();
+          Array.from(root.children).forEach(c => {
+            if (!c.classList || !c.classList.contains('card') || !c.dataset.collapseKey) return;
+            c.classList.toggle('collapsed', collapse);
+            const t = c.querySelector('.collapse-toggle');
+            if (t) t.textContent = collapse ? '▸' : '▾';
+            if (collapse) set.add(c.dataset.collapseKey);
+          });
+          saveCollapsedSet(role, set);
+        });
+      });
+    }
+  }
+
+  function initCollapsibleCards() {
+    makeCardsCollapsible('adminDashboard');
+    makeCardsCollapsible('teacherDashboard');
+    makeCardsCollapsible('studentDashboard');
+  }
+
+  // ============================================================
+  // ============ GLOBAL SEARCH =================================
+  // ============================================================
+  let searchResultsCache = [];
+
+  function detailRow(label, value) {
+    return `<div class="detail-row"><span>${escapeHtml(label)}</span><span>${escapeHtml(value === undefined || value === null || value === '' ? '—' : value)}</span></div>`;
+  }
+
+  function closeDetailModal() {
+    document.getElementById('detailModal')?.classList.add('hidden');
+    document.getElementById('detailOverlay')?.classList.add('hidden');
+  }
+  function openDetailModal(title, html) {
+    const modal = document.getElementById('detailModal');
+    const overlay = document.getElementById('detailOverlay');
+    if (!modal || !overlay) return;
+    document.getElementById('detailTitle').textContent = title;
+    document.getElementById('detailBody').innerHTML = html;
+    modal.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+    modal.scrollTop = 0;
+  }
+
+  function runGlobalSearch(rawQuery) {
+    const resultsDiv = document.getElementById('searchResults');
+    if (!resultsDiv) return;
+    const q = (rawQuery || '').trim().toLowerCase();
+    if (!q) { resultsDiv.classList.add('hidden'); resultsDiv.innerHTML = ''; searchResultsCache = []; return; }
+    if (!currentUser) { resultsDiv.classList.add('hidden'); return; }
+
+    const results = [];
+    const push = (type, label, sub, id) => results.push({ type, label, sub, id });
+    const role = currentUser.role;
+
+    if (role === 'admin') {
+      DB.users.forEach(u => {
+        const nameMatch = (u.name || '').toLowerCase().includes(q);
+        const emailMatch = (u.email || '').toLowerCase().includes(q);
+        if (nameMatch || emailMatch) {
+          const cls = DB.classes.find(c => c.id === u.classId);
+          const sub = u.role === 'student'
+            ? (cls ? getClassLabel(cls) : (u.graduated ? 'Graduated' : 'No class'))
+            : (u.role === 'teacher' ? 'Teacher' : 'Administrator');
+          push(u.role, u.name || '(no name)', u.email + ' • ' + sub, u.id);
+        }
+      });
+
+      DB.subjects.forEach(s => {
+        if ((s.name || '').toLowerCase().includes(q)) {
+          push('subject', s.name, (s.isGeneral ? 'General' : 'Specific') + ' • ' + (s.approved ? 'Approved' : 'Pending'), s.id);
+        }
+      });
+
+      DB.classes.forEach(c => {
+        const lbl = getClassLabel(c);
+        if (lbl.toLowerCase().includes(q)) push('class', lbl, 'Class', c.id);
+      });
+
+      DB.exams.forEach(e => {
+        const title = e.title || '';
+        const subj = getSubjectName(e.subjectId);
+        if (title.toLowerCase().includes(q) || subj.toLowerCase().includes(q)) {
+          push('exam', title, subj + ' • ' + e.status, e.id);
+        }
+      });
+
+      DB.assignments.forEach(a => {
+        if ((a.title || '').toLowerCase().includes(q)) {
+          push('assignment', a.title, getSubjectName(a.subjectId), a.id);
+        }
+      });
+
+      DB.questions.forEach(qq => {
+        if ((qq.text || '').toLowerCase().includes(q)) {
+          push('question', (qq.text || '').slice(0, 90), getSubjectName(qq.subjectId), qq.id);
+        }
+      });
+    }
+
+    else if (role === 'teacher') {
+      const teacherSubjectIds = currentUser.assignedSubjects || [];
+      DB.subjects.forEach(s => {
+        if (!teacherSubjectIds.includes(s.id)) return;
+        if ((s.name || '').toLowerCase().includes(q)) {
+          push('subject', s.name, (s.isGeneral ? 'General' : 'Specific') + ' • ' + (s.approved ? 'Approved' : 'Pending'), s.id);
+        }
+      });
+    }
+
+    else if (role === 'student') {
+      const studentClass = currentUser.classId;
+      if (studentClass) {
+        const availableIds = DB.classSubjects
+          .filter(cs => cs.classId === studentClass)
+          .map(cs => cs.subjectId);
+        DB.subjects.forEach(s => {
+          if (!availableIds.includes(s.id) || s.approved !== true) return;
+          if ((s.name || '').toLowerCase().includes(q)) {
+            push('subject', s.name, (s.isGeneral ? 'General' : 'Specific'), s.id);
+          }
+        });
+      }
+    }
+
+    searchResultsCache = results;
+
+    if (!results.length) {
+      const msg = role === 'admin'
+        ? `No matches found for “${escapeHtml(rawQuery)}”.`
+        : `No matching subject found for “${escapeHtml(rawQuery)}”.`;
+      resultsDiv.innerHTML = `<div class="search-empty">${msg}</div>`;
+      resultsDiv.classList.remove('hidden');
+      return;
+    }
+
+    resultsDiv.innerHTML = results.slice(0, 40).map((r, i) => `
+      <div class="search-item" data-idx="${i}">
+        <span>${escapeHtml(r.label)}<br><small style="color:#64748b;">${escapeHtml(r.sub || '')}</small></span>
+        <span class="search-type">${escapeHtml(r.type)}</span>
+      </div>`).join('') + (results.length > 40 ? `<div class="search-empty">Showing first 40 of ${results.length} results…</div>` : '');
+    resultsDiv.classList.remove('hidden');
+  }
+
+  function showSearchDetail(type, id) {
+    let title = 'Details';
+    let html = '';
+
+    if (type === 'student' || type === 'teacher' || type === 'admin') {
+      const u = DB.users.find(x => x.id === id);
+      if (!u) return;
+      title = u.name || 'User';
+      const cls = DB.classes.find(c => c.id === u.classId);
+      html += detailRow('Role', u.role.charAt(0).toUpperCase() + u.role.slice(1));
+      html += detailRow('Email', u.email);
+      if (u.role === 'student') {
+        html += detailRow('Class', cls ? getClassLabel(cls) : (u.graduated ? 'Graduated 🎓' : 'No class'));
+        const res = DB.examsTaken.filter(r => r.studentId === u.id);
+        const totalScore = res.reduce((a, b) => a + (b.score || 0), 0);
+        const totalQ = res.reduce((a, b) => a + (b.total || 0), 0);
+        html += detailRow('Exams taken', res.length);
+        html += detailRow('Overall score', totalQ ? ((totalScore / totalQ) * 100).toFixed(1) + '%' : '—');
+        html += detailRow('Assignments done', DB.assignmentResults.filter(r => r.studentId === u.id).length);
+        const hist = (u.promotionHistory || []).slice().reverse();
+        if (hist.length) {
+          html += `<div class="detail-section-title">🎓 Promotion History</div>`;
+          hist.forEach(h => { html += detailRow(`${h.from} → ${h.to}`, new Date(h.date).toLocaleDateString()); });
+        }
+      } else if (u.role === 'teacher') {
+        const subs = (u.assignedSubjects || []).map(getSubjectName).join(', ') || 'None';
+        html += detailRow('Assigned subjects', subs);
+        html += detailRow('Exams created', DB.exams.filter(e => e.teacherId === u.id).length);
+        html += detailRow('Questions in bank', DB.questions.filter(qq => qq.teacherId === u.id).length);
+        html += detailRow('Assignments created', DB.assignments.filter(a => a.teacherId === u.id).length);
+      }
+    } else if (type === 'subject') {
+      const s = DB.subjects.find(x => x.id === id);
+      if (!s) return;
+      title = s.name;
+      html += detailRow('Type', s.isGeneral ? 'General (all classes)' : 'Class specific');
+      html += detailRow('Status', s.approved ? 'Approved' : 'Pending approval');
+      html += detailRow('Questions in bank', DB.questions.filter(qq => qq.subjectId === s.id).length);
+      html += detailRow('Exams', DB.exams.filter(e => e.subjectId === s.id).length);
+      const classNames = DB.classSubjects.filter(cs => cs.subjectId === s.id)
+        .map(cs => { const c = DB.classes.find(x => x.id === cs.classId); return c ? getClassLabel(c) : null; })
+        .filter(Boolean);
+      html += detailRow('Assigned to classes', [...new Set(classNames)].join(', ') || 'None');
+    } else if (type === 'class') {
+      const c = DB.classes.find(x => x.id === id);
+      if (!c) return;
+      title = getClassLabel(c);
+      const students = DB.users.filter(u => u.role === 'student' && u.classId === c.id);
+      const subjIds = [...new Set(DB.classSubjects.filter(cs => cs.classId === c.id).map(cs => cs.subjectId))];
+      html += detailRow('Students', students.length);
+      html += detailRow('Subjects', subjIds.map(getSubjectName).join(', ') || 'None');
+      html += `<div class="detail-section-title">Students in this class</div>`;
+      html += students.length
+        ? students.map(s => detailRow(s.name, s.email)).join('')
+        : `<div class="detail-row"><span>—</span><span>No students</span></div>`;
+    } else if (type === 'exam') {
+      const e = DB.exams.find(x => x.id === id);
+      if (!e) return;
+      title = e.title;
+      html += detailRow('Teacher', getTeacherName(e.teacherId));
+      html += detailRow('Subject', getSubjectName(e.subjectId));
+      html += detailRow('Base class', e.baseClass || getBaseClassName(e.classId) || 'N/A');
+      html += detailRow('Type', e.examType);
+      html += detailRow('Scheduled', new Date(e.scheduledDateTime).toLocaleString());
+      html += detailRow('Status', e.status);
+      html += detailRow('Questions', (e.questions || []).length);
+      html += detailRow('Attempts', DB.examsTaken.filter(t => t.examId === e.id).length);
+    } else if (type === 'assignment') {
+      const a = DB.assignments.find(x => x.id === id);
+      if (!a) return;
+      title = a.title;
+      html += detailRow('Subject', getSubjectName(a.subjectId));
+      html += detailRow('Base class', a.baseClass || '—');
+      html += detailRow('Questions', (a.questions || []).length);
+      html += detailRow('Submissions', DB.assignmentResults.filter(r => r.assignmentId === a.id).length);
+    } else if (type === 'question') {
+      const qq = DB.questions.find(x => x.id === id);
+      if (!qq) return;
+      title = 'Question';
+      html += detailRow('Subject', getSubjectName(qq.subjectId));
+      html += detailRow('Teacher', getTeacherName(qq.teacherId));
+      html += `<div class="detail-section-title">Question Text</div><div style="font-size:0.85rem; padding:0.4rem 0;">${escapeHtml(qq.text)}</div>`;
+      html += `<div class="detail-section-title">Options</div>`;
+      (qq.options || []).forEach((opt, i) => {
+        const label = String.fromCharCode(65 + i);
+        html += detailRow(label + (i === qq.correct ? ' ✔ (correct)' : ''), opt);
+      });
+    }
+
+    openDetailModal(title, html);
+  }
+
+  function initGlobalSearch() {
+    const input = document.getElementById('globalSearchInput');
+    const resultsDiv = document.getElementById('searchResults');
+    if (!input || !resultsDiv) return;
+
+    input.addEventListener('input', () => runGlobalSearch(input.value));
+    input.addEventListener('focus', () => { if (input.value.trim()) runGlobalSearch(input.value); });
+
+    resultsDiv.addEventListener('click', (e) => {
+      const item = e.target.closest('.search-item');
+      if (!item) return;
+      const r = searchResultsCache[parseInt(item.dataset.idx, 10)];
+      if (!r) return;
+      resultsDiv.classList.add('hidden');
+      showSearchDetail(r.type, r.id);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-wrapper')) resultsDiv.classList.add('hidden');
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        resultsDiv.classList.add('hidden');
+        closeDetailModal();
+        closeExamEdit();
+      }
+    });
+
+    document.getElementById('closeDetailBtn')?.addEventListener('click', closeDetailModal);
+    document.getElementById('detailOverlay')?.addEventListener('click', closeDetailModal);
+
+    document.getElementById('closeExamEditBtn')?.addEventListener('click', closeExamEdit);
+    document.getElementById('examEditOverlay')?.addEventListener('click', closeExamEdit);
+  }
+
+  // Expose functions globally
   window.startQuickExam = startQuickExam;
   window.startScheduledExam = startScheduledExam;
   window.resumeExam = resumeExam;
   window.DB = DB;
   window.currentUser = currentUser;
-  
-  // Set up the Quick Start Exam button
-  document.getElementById('startStudentExamBtn')?.addEventListener('click', function() { 
-    let subjectId = document.getElementById('studentSubjectSelect').value; 
-    if(subjectId && subjectId !== 'No subjects available' && subjectId !== 'No subjects available for your class') { 
-      window.startQuickExam(subjectId); 
-    } else { 
-      alert("Select a valid subject."); 
-    } 
+
+  document.getElementById('startStudentExamBtn')?.addEventListener('click', function() {
+    let subjectId = document.getElementById('studentSubjectSelect').value;
+    if(subjectId && subjectId !== 'No subjects available' && subjectId !== 'No subjects available for your class') {
+      window.startQuickExam(subjectId);
+    } else {
+      alert("Select a valid subject.");
+    }
   });
-  
+
   document.getElementById('parseBulkBtn')?.addEventListener('click', async () => { let text = document.getElementById('bulkQuestionsText').value.trim(); let subjectId = document.getElementById('bulkSubjectSelect').value; if(!subjectId || !text){ alert("Select subject and paste text"); return; } let blocks = text.split(/\n\s*\n/); let saved=0; for(let block of blocks){ let lines = block.split('\n'); let questionText = ""; let options = ["","","",""]; let correctIdx = -1; for(let line of lines){ line = line.trim(); if(line.match(/^question:/i)) questionText = line.replace(/^question:\s*/i,"").trim(); else if(line.match(/^[A-D][\)\.\-]\s*/i)){ let letter=line[0].toUpperCase(); let idx=letter.charCodeAt(0)-65; if(idx>=0&&idx<4) options[idx]=line.substring(1).replace(/^[\.\)\-]\s*/,'').trim(); } else if(line.match(/^answer:/i)){ let ans=line.replace(/^answer:\s*/i,"").trim().toUpperCase(); if(ans==='A') correctIdx=0; else if(ans==='B') correctIdx=1; else if(ans==='C') correctIdx=2; else if(ans==='D') correctIdx=3; } else if(questionText==="") questionText=line; } if(questionText && options[0] && options[1] && options[2] && options[3] && correctIdx!==-1){ let newQ={ id:'q'+Date.now()+Math.random()+saved, text:questionText, options, correct:correctIdx, subjectId, teacherId:currentUser.id }; await addQuestion(newQ); saved++; } } alert(`Added ${saved} questions.`); document.getElementById('bulkQuestionsText').value=''; refreshTeacher(); });
   let assignQuestions = [];
   document.getElementById('addAssignQuestionBtn')?.addEventListener('click', () => { let idx = assignQuestions.length; assignQuestions.push({ text: "", options: ["","","",""], correct: 0 }); renderAssignQuestions(); });
@@ -680,11 +1523,25 @@
   function attachAssignEvents() { document.querySelectorAll('.assign-q-text').forEach(inp => inp.addEventListener('input', (e) => { let idx = parseInt(e.target.dataset.idx); assignQuestions[idx].text = e.target.value; })); document.querySelectorAll('.assign-opt').forEach(inp => inp.addEventListener('input', (e) => { let idx = parseInt(e.target.dataset.idx); let optIdx = parseInt(e.target.dataset.opt); assignQuestions[idx].options[optIdx] = e.target.value; })); document.querySelectorAll('.assign-correct').forEach(sel => sel.addEventListener('change', (e) => { let idx = parseInt(e.target.dataset.idx); assignQuestions[idx].correct = parseInt(e.target.value); })); document.querySelectorAll('.remove-assign-q').forEach(btn => btn.addEventListener('click', (e) => { let idx = parseInt(btn.dataset.idx); assignQuestions.splice(idx, 1); renderAssignQuestions(); })); }
   document.getElementById('submitAssignmentBtn')?.addEventListener('click', async () => { let title = document.getElementById('assignTitle').value.trim(); let subjectId = document.getElementById('assignSubjectSelect').value; let classId = document.getElementById('assignClassSelect').value; if(!title || !subjectId || !classId){ alert("Please fill title, subject and class"); return; } if(assignQuestions.length === 0){ alert("Add at least one question"); return; } for(let q of assignQuestions){ if(!q.text.trim() || !q.options[0] || !q.options[1] || !q.options[2] || !q.options[3]){ alert("Complete all fields for each question"); return; } } let targetClass = DB.classes.find(c => c.id === classId); let baseClass = targetClass ? targetClass.className : null; let assignmentId = 'ass'+Date.now()+Math.random(); let newAssignment = { id: assignmentId, title, subjectId, classId, baseClass, teacherId: currentUser.id, questions: assignQuestions, createdAt: Date.now() }; await addAssignment(newAssignment); alert("Assignment published to selected class (all arms)!"); document.getElementById('assignTitle').value = ''; assignQuestions = []; renderAssignQuestions(); refreshTeacher(); });
   function initToggle() { const manualPanel = document.getElementById('manualPanel'); const wordPanel = document.getElementById('wordPanel'); const toggleBtns = document.querySelectorAll('.toggle-btn'); if (!manualPanel || !wordPanel) return; toggleBtns.forEach(btn => { btn.addEventListener('click', () => { toggleBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); if (btn.dataset.method === 'manual') { manualPanel.classList.remove('hidden'); wordPanel.classList.add('hidden'); } else { manualPanel.classList.add('hidden'); wordPanel.classList.remove('hidden'); } }); }); }
-  async function init() { await loadAllData(); if (DB.users.length===0||DB.subjects.length===0||DB.classes.length===0) { await seedDefaultData(); await loadAllData(); } const saved = loadUserSession(); if(saved) currentUser = saved; renderAll(); initToggle(); }
+
+  async function init() {
+    await loadAllData();
+    if (DB.users.length===0||DB.subjects.length===0||DB.classes.length===0) { await seedDefaultData(); await loadAllData(); }
+    const saved = loadUserSession();
+    if (saved) {
+      const fresh = DB.users.find(u => u.id === saved.id);
+      currentUser = fresh ? { ...saved, ...fresh } : saved;
+      if (fresh) saveUserSession(currentUser);
+    }
+    renderAll();
+    initToggle();
+    initCollapsibleCards();
+    initGlobalSearch();
+  }
   init();
 </script>
 
-<!-- Equation Helper Modal (only accessible via ∑ button next to question fields) -->
+<!-- Equation Helper Modal -->
 <div id="eqOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:10000; display:none;"></div>
 <div id="eqModal" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; border-radius:1.5rem; width:90%; max-width:700px; box-shadow:0 25px 40px rgba(0,0,0,0.3); z-index:10010; display:none; flex-direction:column; padding:1.2rem;">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -733,7 +1590,7 @@
 </div>
 
 <script>
-  // Equation Helper logic (only accessible via ∑ button next to question fields)
+  // Equation Helper logic
   (function() {
     const modal = document.getElementById('eqModal');
     const overlay = document.getElementById('eqOverlay');
@@ -742,9 +1599,9 @@
     const insertBtn = document.getElementById('insertEqBtn');
     const latexInput = document.getElementById('eqLatexInput');
     const previewDiv = document.getElementById('eqPreview');
-    
+
     let activeField = null;
-    
+
     function openModal() {
       modal.style.display = 'flex';
       overlay.style.display = 'block';
@@ -776,7 +1633,7 @@
         activeField.selectionStart = start + text.length;
         activeField.selectionEnd = start + text.length;
       } else {
-        const anyInput = document.querySelector('#batchQuestionsContainer input, .word-q-text, .assign-q-text');
+        const anyInput = document.querySelector('#batchQuestionsContainer input, .word-q-text, .assign-q-text, .edit-q-text');
         if (anyInput) {
           anyInput.focus();
           activeField = anyInput;
@@ -799,7 +1656,7 @@
       }
     });
     latexInput?.addEventListener('input', updatePreview);
-    
+
     document.querySelectorAll('.eq-symbol-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         let sym = btn.dataset.sym;
@@ -816,14 +1673,14 @@
         }
       });
     });
-    
-    // Add ∑ button inside each question batch (this is the only way to access the equation editor now)
+
     const observer = new MutationObserver(() => {
-      document.querySelectorAll('.question-batch .input-field:first-child, .word-question-card .input-field:first-child').forEach(field => {
+      document.querySelectorAll('.question-batch .input-field:first-child, .word-question-card .input-field:first-child, .exam-edit-q .input-field:first-child').forEach(field => {
         if(field.querySelector('.inline-eq-btn')) return;
         const btn = document.createElement('button');
         btn.textContent = '∑';
         btn.className = 'small inline-eq-btn';
+        btn.type = 'button';
         btn.style.marginLeft = '8px';
         btn.style.padding = '2px 8px';
         btn.style.background = '#f5b042';
