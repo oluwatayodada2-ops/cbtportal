@@ -2,87 +2,164 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="theme-color" content="#0f2b3d">
   <title>TOP ELECT COLLEGE - CBT System (Persistent)</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.2/mammoth.browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    body { background: #f1f5f9; padding: 1.5rem; }
-    .app-container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1); overflow: hidden; }
-    .app-header { background: #0f2b3d; color: white; padding: 0.9rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; position: relative; z-index: 1000; }
-    .logo h1 { font-size: 1.5rem; font-weight: 600; }
+    /* ============================================================ */
+    /* ============ RESET & BASE ================================== */
+    /* ============================================================ */
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      background: #f1f5f9;
+      padding: 1.5rem;
+      font-family: 'Inter', sans-serif;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.4;
+      min-height: 100vh;
+    }
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 2rem;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    /* ============================================================ */
+    /* ============ HEADER ======================================== */
+    /* ============================================================ */
+    .app-header {
+      background: #0f2b3d;
+      color: white;
+      padding: 0.9rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      position: relative;
+      z-index: 1000;
+    }
+    .logo h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: 0.01em; }
     .logo span { color: #f5b042; }
-    .user-info { background: #1e4a62; padding: 0.3rem 1rem; border-radius: 40px; display: flex; gap: 0.8rem; align-items: center; font-size: 0.85rem; }
-    .logout-btn { background: #c2412c; border: none; padding: 0.2rem 0.9rem; border-radius: 30px; cursor: pointer; }
+    .user-info {
+      background: #1e4a62;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+    .logout-btn { background: #c2412c; border: none; padding: 0.2rem 0.9rem; border-radius: 30px; cursor: pointer; color: #fff; }
+
+    /* ============================================================ */
+    /* ============ MAIN CONTENT ================================== */
+    /* ============================================================ */
     .main-content { padding: 1.8rem; }
     .dashboard { display: none; }
     .dashboard.active { display: block; animation: fade 0.2s; }
     @keyframes fade { from { opacity:0; } to { opacity:1; } }
-    .card { background: white; border-radius: 1.2rem; padding: 1.2rem; margin-bottom: 1.8rem; border: 1px solid #eef2f6; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
-    .card-header { font-weight: 600; font-size: 1.1rem; margin-bottom: 1rem; border-left: 3px solid #f5b042; padding-left: 0.7rem; }
+    .dashboard h2 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #0f2b3d; }
+
+    /* ============================================================ */
+    /* ============ CARDS ========================================= */
+    /* ============================================================ */
+    .card {
+      background: white;
+      border-radius: 1.2rem;
+      padding: 1.2rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid #eef2f6;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .card-header {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid #f5b042;
+      padding-left: 0.7rem;
+      color: #0f2b3d;
+    }
+
+    /* ============================================================ */
+    /* ============ FORMS ========================================= */
+    /* ============================================================ */
     .form-grid { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: flex-end; margin-bottom: 1rem; }
     .input-field { flex: 1 1 180px; display: flex; flex-direction: column; gap: 0.25rem; }
     .input-field label { font-size: 0.75rem; font-weight: 500; color: #334155; }
-    input, select, textarea { padding: 0.5rem 0.7rem; border-radius: 0.7rem; border: 1px solid #cbd5e1; background: #fefefe; font-size: 0.85rem; }
-    button { background: #0f2b3d; color: white; border: none; padding: 0.45rem 1rem; border-radius: 1.8rem; cursor: pointer; font-weight: 500; font-size: 0.8rem; transition: 0.1s; }
+    input, select, textarea {
+      padding: 0.5rem 0.7rem;
+      border-radius: 0.7rem;
+      border: 1px solid #cbd5e1;
+      background: #fefefe;
+      font-size: 0.85rem;
+      font-family: inherit;
+      color: inherit;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #f5b042;
+      box-shadow: 0 0 0 3px rgba(245,176,66,0.15);
+    }
+    textarea { font-family: 'Inter', sans-serif; resize: vertical; }
+
+    /* ============================================================ */
+    /* ============ BUTTONS ======================================= */
+    /* ============================================================ */
+    button {
+      background: #0f2b3d;
+      color: white;
+      border: none;
+      padding: 0.45rem 1rem;
+      border-radius: 1.8rem;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.8rem;
+      font-family: inherit;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
     button.primary { background: #f5b042; color: #1e2f3a; }
     button.small { padding: 0.2rem 0.6rem; font-size: 0.7rem; border-radius: 1rem; }
     button.danger { background: #c2412c; }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .badge { background: #e2e8f0; padding: 0.2rem 0.5rem; border-radius: 1.5rem; font-size: 0.7rem; }
+
+    /* ============================================================ */
+    /* ============ BADGES ======================================== */
+    /* ============================================================ */
+    .badge { background: #e2e8f0; padding: 0.2rem 0.5rem; border-radius: 1.5rem; font-size: 0.7rem; display: inline-block; color: #334155; }
     .badge.approved { background: #d1fae5; color: #065f46; }
     .badge.pending { background: #fed7aa; color: #9c4221; }
     .badge.published { background: #c6f6d5; color: #22543d; }
+
+    /* ============================================================ */
+    /* ============ UTILITY ======================================= */
+    /* ============================================================ */
     .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
     .mt-2 { margin-top: 0.8rem; }
+    .hidden { display: none !important; }
     .radio-group { display: flex; gap: 1rem; align-items: center; margin-top: 0.3rem; }
+
+    /* ============================================================ */
+    /* ============ COLLAPSIBLE =================================== */
+    /* ============================================================ */
     .collapsible { cursor: pointer; background: #f8fafc; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.3rem; }
     .collapsible:hover { background: #f1f5f9; }
     .questions-list { display: none; padding-left: 1rem; margin-top: 0.5rem; }
-    .question-batch { border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem; background: #fefce8; position: relative; }
-    .teacher-subj-row { border-bottom: 1px solid #eef2f6; padding: 0.8rem 0; }
-    .checkbox-group { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 0.5rem 0; }
-    .word-question-card { border: 1px solid #f0c0a0; background: #fff7ed; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem; }
-    .toggle-group { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
-    .toggle-btn { background: #f1f5f9; color: #1e293b; border: none; padding: 0.4rem 1rem; border-radius: 2rem; cursor: pointer; font-size: 0.8rem; }
-    .toggle-btn.active { background: #f5b042; color: #1e2f3a; font-weight: 600; }
-    .hidden { display: none; }
-    @media (max-width: 640px) {
-      table, thead, tbody, th, td, tr { display: block; }
-      thead tr { position: absolute; top: -9999px; left: -9999px; }
-      tr { margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 0.5rem; background: white; }
-      td { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid #eef2f6; white-space: normal; word-break: break-word; }
-      td:before { content: attr(data-label); font-weight: 600; width: 40%; margin-right: 0.5rem; color: #0f2b3d; }
-      td:last-child { border-bottom: none; }
-      .app-container { border-radius: 1rem; }
-      .main-content { padding: 1rem; }
-      body { padding: 0.75rem; }
-      .form-grid { flex-direction: column; align-items: stretch; }
-      .form-grid .input-field, .form-grid button, .form-grid select, .form-grid input { width: 100%; }
-      .app-header { flex-direction: column; text-align: center; padding: 1rem; }
-      .user-info { justify-content: center; flex-wrap: wrap; }
-      .teacher-subj-row { display: flex; flex-direction: column; align-items: flex-start; }
-      .teacher-subj-row .checkbox-group { width: 100%; margin-bottom: 0.75rem; }
-      .search-wrapper { width: 100%; max-width: none; }
-    }
-    @media (min-width: 769px) {
-      .form-grid { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; }
-      .teacher-subj-row { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; justify-content: space-between; }
-      .checkbox-group { flex: 2 1 auto; }
-    }
-    .paletteBtn { margin: 2px; font-size: 0.7rem; }
-    .eq-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
-    .eq-category { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; background: #f8fafc; padding: 4px 8px; border-radius: 40px; }
-    .eq-category-title { font-size: 0.7rem; font-weight: 600; color: #334155; margin-right: 4px; }
-    .eq-symbol-btn { background: white; border: 1px solid #cbd5e1; border-radius: 30px; padding: 4px 12px; font-size: 0.8rem; cursor: pointer; transition: 0.1s; color: #1e293b; }
-    .eq-symbol-btn:hover { background: #f5b042; border-color: #f5b042; color: white; }
-    .eq-input { width: 100%; font-family: monospace; font-size: 0.9rem; padding: 10px; border-radius: 0.7rem; border: 1px solid #cbd5e1; background: #fefefe; }
-    .eq-preview { background: #fefce8; border: 1px solid #fde047; border-radius: 1rem; padding: 12px; margin: 10px 0; min-height: 70px; font-size: 1rem; overflow-x: auto; }
-    .inline-eq-btn { background: #f5b042; color: #1e2f3a; border: none; border-radius: 20px; padding: 2px 8px; font-size: 0.7rem; margin-left: 8px; cursor: pointer; }
-
-    /* ============ Collapsible cards ============ */
     .collapsible-header { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; user-select: none; }
     .collapsible-header:hover { color: #b9770e; }
     .collapse-toggle { font-size: 0.85rem; color: #94a3b8; flex-shrink: 0; }
@@ -93,7 +170,33 @@
     .dash-toolbar button { background: #e2e8f0; color: #1e293b; }
     .dash-toolbar button:hover { background: #cbd5e1; }
 
-    /* ============ Global search ============ */
+    /* ============================================================ */
+    /* ============ QUESTION BATCH / PANELS ======================= */
+    /* ============================================================ */
+    .question-batch { border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem; background: #fefce8; position: relative; }
+    .teacher-subj-row { border-bottom: 1px solid #eef2f6; padding: 0.8rem 0; }
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 0.5rem 0; }
+    .word-question-card { border: 1px solid #f0c0a0; background: #fff7ed; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem; }
+    .toggle-group { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; flex-wrap: wrap; }
+    .toggle-btn { background: #f1f5f9; color: #1e293b; border: none; padding: 0.4rem 1rem; border-radius: 2rem; cursor: pointer; font-size: 0.8rem; }
+    .toggle-btn.active { background: #f5b042; color: #1e2f3a; font-weight: 600; }
+
+    /* ============================================================ */
+    /* ============ EQUATION TOOLBAR ============================== */
+    /* ============================================================ */
+    .paletteBtn { margin: 2px; font-size: 0.7rem; }
+    .eq-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
+    .eq-category { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; background: #f8fafc; padding: 4px 8px; border-radius: 40px; }
+    .eq-category-title { font-size: 0.7rem; font-weight: 600; color: #334155; margin-right: 4px; }
+    .eq-symbol-btn { background: white; border: 1px solid #cbd5e1; border-radius: 30px; padding: 4px 12px; font-size: 0.8rem; cursor: pointer; transition: 0.1s; color: #1e293b; }
+    .eq-symbol-btn:hover { background: #f5b042; border-color: #f5b042; color: white; }
+    .eq-input { width: 100%; font-family: monospace; font-size: 0.9rem; padding: 10px; border-radius: 0.7rem; border: 1px solid #cbd5e1; background: #fefefe; }
+    .eq-preview { background: #fefce8; border: 1px solid #fde047; border-radius: 1rem; padding: 12px; margin: 10px 0; min-height: 70px; font-size: 1rem; overflow-x: auto; }
+    .inline-eq-btn { background: #f5b042; color: #1e2f3a; border: none; border-radius: 20px; padding: 2px 8px; font-size: 0.7rem; margin-left: 8px; cursor: pointer; }
+
+    /* ============================================================ */
+    /* ============ GLOBAL SEARCH ================================= */
+    /* ============================================================ */
     .search-wrapper { position: relative; flex: 1 1 240px; max-width: 380px; }
     #globalSearchInput { width: 100%; padding: 0.45rem 1rem; border-radius: 40px; border: 1px solid #1e4a62; background: #1e4a62; color: #fff; font-size: 0.82rem; outline: none; }
     #globalSearchInput::placeholder { color: #94a3b8; }
@@ -105,9 +208,11 @@
     .search-type { font-size: 0.62rem; background: #e2e8f0; color: #334155; padding: 0.12rem 0.55rem; border-radius: 1rem; text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
     .search-empty { padding: 0.8rem; font-size: 0.8rem; color: #64748b; text-align: center; }
 
-    /* ============ Detail / search modal ============ */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.5); z-index: 9000; }
-    .modal-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #fff; border-radius: 1.2rem; width: 92%; max-width: 560px; max-height: 82vh; overflow-y: auto; z-index: 9001; padding: 1.2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+    /* ============================================================ */
+    /* ============ MODALS ======================================== */
+    /* ============================================================ */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.5); z-index: 9000; -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+    .modal-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #fff; border-radius: 1.2rem; width: 92%; max-width: 560px; max-height: 82vh; overflow-y: auto; z-index: 9001; padding: 1.2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.3); -webkit-overflow-scrolling: touch; }
     .modal-box.wide { max-width: 820px; }
     .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; gap: 1rem; }
     .modal-head h3 { font-size: 1.1rem; color: #0f2b3d; }
@@ -117,15 +222,249 @@
     .detail-row > span:last-child { text-align: right; word-break: break-word; }
     .detail-section-title { font-weight: 600; margin: 0.9rem 0 0.3rem; font-size: 0.85rem; color: #0f2b3d; }
 
-    /* ============ Promotion panel ============ */
+    /* ============================================================ */
+    /* ============ PROMOTION PANEL =============================== */
+    /* ============================================================ */
     .promote-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.7rem; border-bottom: 1px solid #eef2f6; font-size: 0.85rem; border-radius: 0.5rem; cursor: pointer; }
     .promote-row:hover { background: #f8fafc; }
     .promote-row small { color: #64748b; }
     .promote-scroll { max-height: 300px; overflow-y: auto; border: 1px solid #eef2f6; border-radius: 0.8rem; padding: 0.3rem; }
 
-    /* ============ Exam edit modal ============ */
+    /* ============================================================ */
+    /* ============ EXAM EDIT MODAL =============================== */
+    /* ============================================================ */
     .exam-edit-q { border: 1px solid #e2e8f0; border-radius: 0.9rem; padding: 0.8rem; margin-bottom: 0.8rem; background: #fefce8; }
     .exam-edit-warning { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 0.7rem; padding: 0.5rem 0.8rem; font-size: 0.78rem; color: #92400e; margin-bottom: 0.7rem; }
+
+    /* ============================================================ */
+    /* ============ TABLET (641px – 1024px) ======================= */
+    /* ============================================================ */
+    @media (min-width: 641px) and (max-width: 1024px) {
+      body { padding: 1rem; }
+      .app-container { border-radius: 1.5rem; }
+      .app-header { padding: 0.9rem 1.4rem; }
+      .main-content { padding: 1.4rem; }
+      .card { padding: 1.1rem; margin-bottom: 1.4rem; }
+      .form-grid { gap: 0.75rem; }
+      .input-field { flex: 1 1 200px; }
+      .dashboard h2 { font-size: 1.35rem; }
+    }
+
+    /* ============================================================ */
+    /* ============ MOBILE (<= 640px) ============================= */
+    /* ============================================================ */
+    @media (max-width: 640px) {
+      body { padding: 0.5rem; background: #e2e8f0; }
+      .app-container { border-radius: 1.1rem; box-shadow: 0 12px 24px -8px rgba(0,0,0,0.12); }
+
+      /* --- Header --- */
+      .app-header {
+        flex-direction: column;
+        padding: 0.85rem 1rem;
+        gap: 0.7rem;
+        align-items: stretch;
+      }
+      .logo { text-align: center; }
+      .logo h1 { font-size: 1.15rem; letter-spacing: 0.02em; }
+      .search-wrapper {
+        order: 3;
+        width: 100%;
+        max-width: none;
+        flex: 1 1 100%;
+      }
+      #globalSearchInput { padding: 0.65rem 1rem; font-size: 16px !important; border-radius: 30px; background: #ffffff; color: #0f172a; border-color: #f5b042; }
+      #globalSearchInput::placeholder { color: #94a3b8; }
+      .user-info {
+        order: 2;
+        justify-content: space-between;
+        width: 100%;
+        font-size: 0.78rem;
+        padding: 0.4rem 0.6rem 0.4rem 0.9rem;
+        gap: 0.5rem;
+      }
+      #userNameSpan { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+      .logout-btn { padding: 0.5rem 1rem; min-height: 38px; font-size: 0.78rem; }
+      #userRoleBadge { font-size: 0.68rem; padding: 0.15rem 0.55rem; }
+      .search-results { max-height: 60vh; border-radius: 0.85rem; }
+
+      /* --- Layout --- */
+      .main-content { padding: 0.9rem; }
+      .dashboard h2 { font-size: 1.2rem; margin-bottom: 0.6rem; text-align: center; }
+
+      /* --- Cards --- */
+      .card { border-radius: 1rem; padding: 0.95rem; margin-bottom: 1rem; }
+      .card-header { font-size: 0.98rem; padding-left: 0.6rem; margin-bottom: 0.85rem; }
+
+      /* --- Dashboard toolbar --- */
+      .dash-toolbar { gap: 0.4rem; justify-content: stretch; margin-bottom: 0.8rem; }
+      .dash-toolbar button { flex: 1 1 auto; padding: 0.55rem 0.7rem; font-size: 0.78rem; border-radius: 0.7rem; min-height: 40px; }
+
+      /* --- Forms --- */
+      .form-grid { flex-direction: column; gap: 0.65rem; margin-bottom: 0.85rem; }
+      .input-field, .form-grid > * { flex: 1 1 100%; width: 100%; }
+      .input-field label { font-size: 0.78rem; }
+      input, select, textarea {
+        padding: 0.7rem 0.85rem;
+        font-size: 16px !important; /* prevents iOS zoom on focus */
+        border-radius: 0.65rem;
+        min-height: 44px;
+      }
+      textarea { min-height: 90px; }
+      .form-grid button { width: 100%; }
+
+      /* --- Buttons: touch-friendly --- */
+      button {
+        padding: 0.65rem 1rem;
+        font-size: 0.85rem;
+        border-radius: 1rem;
+        min-height: 44px;
+      }
+      button.small { padding: 0.4rem 0.75rem; font-size: 0.75rem; min-height: 34px; border-radius: 0.75rem; }
+
+      /* --- Toggle group (exam method) --- */
+      .toggle-group { flex-direction: column; border-bottom: none; gap: 0.4rem; padding-bottom: 0.6rem; }
+      .toggle-btn { width: 100%; padding: 0.7rem; border-radius: 0.7rem; font-size: 0.85rem; min-height: 44px; }
+
+      /* --- Badges --- */
+      .badge { font-size: 0.68rem; padding: 0.18rem 0.55rem; }
+
+      /* --- Tables become cards --- */
+      table { width: 100% !important; border-collapse: collapse; }
+      thead { display: none; }
+      tbody, tr, td { display: block; width: 100%; }
+      tr {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.9rem;
+        padding: 0.55rem 0.85rem;
+        margin-bottom: 0.65rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      }
+      td {
+        padding: 0.42rem 0;
+        border-bottom: 1px dashed #eef2f6;
+        font-size: 0.82rem;
+        color: #334155;
+        text-align: right;
+        word-break: break-word;
+      }
+      td:last-child { border-bottom: none; }
+      td:first-child {
+        font-weight: 600;
+        color: #0f2b3d;
+        font-size: 0.88rem;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.55rem;
+        margin-bottom: 0.25rem;
+        text-align: left;
+      }
+      td:has(button) { padding-top: 0.55rem; display: flex; gap: 0.4rem; justify-content: flex-end; flex-wrap: wrap; }
+      td button.small { flex: 1 1 auto; min-width: 70px; }
+
+      /* --- Collapsible inner question lists --- */
+      .collapsible { font-size: 0.85rem; padding: 0.6rem 0.75rem; }
+      .questions-list { padding-left: 0.5rem; font-size: 0.8rem; }
+
+      /* --- Question batches --- */
+      .question-batch { padding: 0.8rem; border-radius: 0.85rem; }
+      .question-batch .form-grid { gap: 0.5rem; }
+      .word-question-card { padding: 0.85rem; border-radius: 0.85rem; }
+
+      /* --- Teacher subject assignments --- */
+      .teacher-subj-row { flex-direction: column; align-items: stretch; gap: 0.6rem; padding: 0.9rem 0; }
+      .teacher-subj-row .checkbox-group { width: 100%; margin-bottom: 0; }
+      .teacher-subj-row .save-teacher-subj { width: 100%; }
+      .checkbox-group { gap: 0.5rem 0.8rem; }
+      .checkbox-group label { font-size: 0.82rem; }
+
+      /* --- Promotion panel --- */
+      .promote-row { padding: 0.6rem 0.5rem; font-size: 0.82rem; }
+      .promote-scroll { max-height: 260px; }
+
+      /* --- Modals --- */
+      .modal-box {
+        width: 96%;
+        max-height: 88vh;
+        padding: 1rem;
+        border-radius: 1rem;
+      }
+      .modal-box.wide { max-width: 96%; }
+      .modal-head h3 { font-size: 1rem; }
+      .modal-head button { font-size: 1.8rem; min-height: auto; padding: 0; width: 34px; height: 34px; }
+      .detail-row { flex-direction: column; align-items: flex-start; gap: 0.15rem; padding: 0.5rem 0; font-size: 0.82rem; }
+      .detail-row > span:last-child { text-align: left; }
+      .detail-section-title { font-size: 0.82rem; }
+
+      /* --- Exam edit modal --- */
+      .exam-edit-q { padding: 0.7rem; }
+      .exam-edit-q .form-grid { gap: 0.5rem; }
+
+      /* --- Equation modal --- */
+      #eqModal { width: 96% !important; padding: 1rem !important; border-radius: 1rem !important; max-height: 92vh; overflow-y: auto; }
+      .eq-toolbar { gap: 6px; }
+      .eq-category { padding: 3px 6px; gap: 4px; }
+      .eq-symbol-btn { padding: 5px 10px; font-size: 0.78rem; min-height: 32px; }
+      .eq-preview { font-size: 0.95rem; padding: 10px; }
+
+      /* --- Exam taking area --- */
+      #examArea h4 { font-size: 1rem; line-height: 1.4; margin: 0.6rem 0; }
+      #examArea .form-grid { flex-direction: row; flex-wrap: wrap; gap: 0.4rem; }
+      #examArea .form-grid button { flex: 1 1 calc(50% - 0.2rem); min-width: 0; }
+      .paletteBtn { min-width: 32px; min-height: 32px; font-size: 0.75rem; }
+
+      /* --- Search items --- */
+      .search-item { font-size: 0.82rem; padding: 0.65rem 0.75rem; }
+      .search-type { font-size: 0.6rem; }
+    }
+
+    /* ============================================================ */
+    /* ============ EXTRA SMALL (<= 380px) ======================== */
+    /* ============================================================ */
+    @media (max-width: 380px) {
+      body { padding: 0.35rem; }
+      .app-container { border-radius: 0.9rem; }
+      .app-header { padding: 0.7rem 0.75rem; }
+      .logo h1 { font-size: 1rem; }
+      .main-content { padding: 0.7rem; }
+      .card { padding: 0.8rem; border-radius: 0.85rem; }
+      .card-header { font-size: 0.92rem; }
+      .dashboard h2 { font-size: 1.1rem; }
+      button { font-size: 0.8rem; padding: 0.6rem 0.85rem; }
+      button.small { font-size: 0.72rem; padding: 0.35rem 0.65rem; }
+      .user-info { font-size: 0.72rem; }
+      #userNameSpan { max-width: 130px; }
+      .modal-box { width: 98%; padding: 0.85rem; }
+      .modal-head h3 { font-size: 0.95rem; }
+    }
+
+    /* ============================================================ */
+    /* ============ LANDSCAPE PHONE =============================== */
+    /* ============================================================ */
+    @media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+      .app-header { flex-direction: row; padding: 0.6rem 1rem; gap: 0.6rem; align-items: center; }
+      .logo h1 { font-size: 1rem; }
+      .search-wrapper { flex: 1 1 180px; max-width: 260px; order: 2; }
+      .user-info { font-size: 0.75rem; padding: 0.25rem 0.7rem; order: 3; width: auto; }
+      .main-content { padding: 0.8rem; }
+      .modal-box { max-height: 92vh; }
+    }
+
+    /* ============================================================ */
+    /* ============ HOVER-ONLY EFFECTS ============================ */
+    /* ============================================================ */
+    @media (hover: hover) {
+      button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+      button.small:hover:not(:disabled) { transform: none; box-shadow: none; }
+    }
+
+    /* ============================================================ */
+    /* ============ PRINT ========================================= */
+    /* ============================================================ */
+    @media print {
+      body { background: white; padding: 0; }
+      .app-header, .search-wrapper, .dash-toolbar, .logout-btn, button { display: none !important; }
+      .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    }
   </style>
 </head>
 <body>
@@ -447,12 +786,12 @@
         </select></div>
         <div class="input-field"><label>Exam Date &amp; Time</label><input type="datetime-local" id="editExamDateTime" value="${new Date(editingExam.scheduledDateTime).toISOString().slice(0,16)}"></div>
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem; flex-wrap:wrap; gap:0.5rem;">
         <strong style="font-size:0.9rem;">Questions (<span id="editQCount">${(editingExam.questions||[]).length}</span>)</strong>
         <button id="addEditExamQuestionBtn" class="small primary" type="button">+ Add Question</button>
       </div>
       <div id="editExamQuestions" class="mt-2"></div>
-      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem; flex-wrap:wrap;">
         <button id="cancelExamEditBtn" class="small" type="button">Cancel</button>
         <button id="saveExamEditBtn" class="primary" type="button">💾 Save Changes</button>
       </div>
@@ -904,19 +1243,19 @@
     });
   }
 
-  function renderSubjectsList() { let html = '<div style="display:flex; flex-wrap:wrap; gap:0.5rem;">'; DB.subjects.forEach(s => { html += `<span style="background:#f1f5f9; padding:0.2rem 0.6rem; border-radius:1rem;">${escapeHtml(s.name)} ${s.isGeneral ? '(General)' : ''} <button class="small" data-del-subj="${s.id}">✖</button></span>`; }); html += '</div>'; document.getElementById('subjectsList').innerHTML = html; document.querySelectorAll('[data-del-subj]').forEach(btn => btn.onclick = async () => { let sid = btn.dataset.delSubj; await deleteSubject(sid); DB.classSubjects = DB.classSubjects.filter(cs=>cs.subjectId!==sid); refreshAdmin(); }); }
-  function renderClassesList() { let html = '<div style="display:flex; flex-wrap:wrap; gap:0.5rem;">'; DB.classes.forEach(c => { html += `<span>${getClassLabel(c)} <button class="small" data-del-cls="${c.id}">✖</button></span>`; }); html += '</div>'; document.getElementById('classesList').innerHTML = html; document.querySelectorAll('[data-del-cls]').forEach(btn => btn.onclick = async () => { let cid = btn.dataset.delCls; await deleteClass(cid); DB.classSubjects = DB.classSubjects.filter(cs=>cs.classId!==cid); refreshAdmin(); }); }
-  function renderClassSubjectAssignments() { let html = ''; DB.classes.forEach(c => { const classSubjectEntries = DB.classSubjects.filter(cs => cs.classId === c.id); const uniqueSubjectIds = [...new Map(classSubjectEntries.map(cs => [cs.subjectId, cs])).values()]; const assignedIds = uniqueSubjectIds.map(cs => cs.subjectId); const availableSubjects = DB.subjects.filter(s => !assignedIds.includes(s.id)); html += `<div style="border:1px solid #eef2f6; border-radius:1rem; padding:0.7rem; margin-bottom:0.7rem;"><strong>${getClassLabel(c)}</strong><div>Assigned: ${assignedIds.map(sid => getSubjectName(sid)).join(', ') || 'None'}</div><div class="form-grid mt-2"><div class="input-field"><label>Add Subject</label><select id="addSubjToClass-${c.id}">${availableSubjects.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}</select></div><button class="small add-subj-class" data-classid="${c.id}">+</button></div><div>${assignedIds.map(sid => `<button class="small danger remove-cs" data-class="${c.id}" data-subj="${sid}">Remove ${getSubjectName(sid)}</button> `).join('')}</div></div>`; }); document.getElementById('classSubjectAssignments').innerHTML = html; document.querySelectorAll('.add-subj-class').forEach(btn => btn.onclick = async (e) => { let cid = btn.dataset.classid; let sid = document.getElementById(`addSubjToClass-${cid}`).value; if(!sid) return; if (DB.classSubjects.some(cs => cs.classId === cid && cs.subjectId === sid)) { alert("Subject already assigned to this class!"); return; } let newId = 'cs'+Date.now()+Math.random(); let newCS = { id: newId, classId: cid, subjectId: sid }; await addClassSubject(newCS); refreshAdmin(); }); document.querySelectorAll('.remove-cs').forEach(btn => btn.onclick = async () => { let cid = btn.dataset.class; let sid = btn.dataset.subj; let toRemove = DB.classSubjects.find(cs => cs.classId === cid && cs.subjectId === sid); if(toRemove) { DB.classSubjects = DB.classSubjects.filter(cs => cs.id !== toRemove.id); await deleteClassSubject(toRemove.id); refreshAdmin(); } }); }
+  function renderSubjectsList() { let html = '<div style="display:flex; flex-wrap:wrap; gap:0.5rem;">'; DB.subjects.forEach(s => { html += `<span style="background:#f1f5f9; padding:0.3rem 0.7rem; border-radius:1rem; display:inline-flex; align-items:center; gap:0.4rem;">${escapeHtml(s.name)} ${s.isGeneral ? '(General)' : ''} <button class="small" data-del-subj="${s.id}">✖</button></span>`; }); html += '</div>'; document.getElementById('subjectsList').innerHTML = html; document.querySelectorAll('[data-del-subj]').forEach(btn => btn.onclick = async () => { let sid = btn.dataset.delSubj; await deleteSubject(sid); DB.classSubjects = DB.classSubjects.filter(cs=>cs.subjectId!==sid); refreshAdmin(); }); }
+  function renderClassesList() { let html = '<div style="display:flex; flex-wrap:wrap; gap:0.5rem;">'; DB.classes.forEach(c => { html += `<span style="background:#f1f5f9; padding:0.3rem 0.7rem; border-radius:1rem; display:inline-flex; align-items:center; gap:0.4rem;">${getClassLabel(c)} <button class="small" data-del-cls="${c.id}">✖</button></span>`; }); html += '</div>'; document.getElementById('classesList').innerHTML = html; document.querySelectorAll('[data-del-cls]').forEach(btn => btn.onclick = async () => { let cid = btn.dataset.delCls; await deleteClass(cid); DB.classSubjects = DB.classSubjects.filter(cs=>cs.classId!==cid); refreshAdmin(); }); }
+  function renderClassSubjectAssignments() { let html = ''; DB.classes.forEach(c => { const classSubjectEntries = DB.classSubjects.filter(cs => cs.classId === c.id); const uniqueSubjectIds = [...new Map(classSubjectEntries.map(cs => [cs.subjectId, cs])).values()]; const assignedIds = uniqueSubjectIds.map(cs => cs.subjectId); const availableSubjects = DB.subjects.filter(s => !assignedIds.includes(s.id)); html += `<div style="border:1px solid #eef2f6; border-radius:1rem; padding:0.8rem; margin-bottom:0.8rem;"><strong>${getClassLabel(c)}</strong><div style="margin-top:0.3rem; font-size:0.82rem; color:#475569;">Assigned: ${assignedIds.map(sid => getSubjectName(sid)).join(', ') || 'None'}</div><div class="form-grid mt-2"><div class="input-field"><label>Add Subject</label><select id="addSubjToClass-${c.id}">${availableSubjects.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}</select></div><button class="small add-subj-class" data-classid="${c.id}">+ Add</button></div><div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.5rem;">${assignedIds.map(sid => `<button class="small danger remove-cs" data-class="${c.id}" data-subj="${sid}">Remove ${getSubjectName(sid)}</button>`).join('')}</div></div>`; }); document.getElementById('classSubjectAssignments').innerHTML = html; document.querySelectorAll('.add-subj-class').forEach(btn => btn.onclick = async (e) => { let cid = btn.dataset.classid; let sid = document.getElementById(`addSubjToClass-${cid}`).value; if(!sid) return; if (DB.classSubjects.some(cs => cs.classId === cid && cs.subjectId === sid)) { alert("Subject already assigned to this class!"); return; } let newId = 'cs'+Date.now()+Math.random(); let newCS = { id: newId, classId: cid, subjectId: sid }; await addClassSubject(newCS); refreshAdmin(); }); document.querySelectorAll('.remove-cs').forEach(btn => btn.onclick = async () => { let cid = btn.dataset.class; let sid = btn.dataset.subj; let toRemove = DB.classSubjects.find(cs => cs.classId === cid && cs.subjectId === sid); if(toRemove) { DB.classSubjects = DB.classSubjects.filter(cs => cs.id !== toRemove.id); await deleteClassSubject(toRemove.id); refreshAdmin(); } }); }
   function renderTeacherSubjectAssignments() { const teachers = DB.users.filter(u => u.role === 'teacher'); const subjects = DB.subjects; let html = ''; for (let teacher of teachers) { const assigned = teacher.assignedSubjects || []; html += `<div class="teacher-subj-row"><strong>${escapeHtml(teacher.name)} (${escapeHtml(teacher.email)})</strong><div class="checkbox-group" data-teacher-id="${teacher.id}">`; subjects.forEach(subj => { const isChecked = assigned.includes(subj.id); html += `<label style="display:inline-flex; align-items:center; gap:4px;"><input type="checkbox" class="teacher-subj-cb" data-subj="${subj.id}" ${isChecked ? 'checked' : ''}> ${escapeHtml(subj.name)}</label>`; }); html += `</div><button class="small primary save-teacher-subj" data-teacher="${teacher.id}">Save Subjects</button></div>`; } document.getElementById('teacherSubjectAssignments').innerHTML = html || '<p>No teachers found.</p>'; document.querySelectorAll('.save-teacher-subj').forEach(btn => { btn.onclick = async () => { const teacherId = btn.dataset.teacher; const container = btn.previousElementSibling; const checkboxes = container.querySelectorAll('.teacher-subj-cb:checked'); const selectedSubjects = Array.from(checkboxes).map(cb => cb.dataset.subj); const teacher = DB.users.find(u => u.id === teacherId); if (teacher) { teacher.assignedSubjects = selectedSubjects; await updateUser(teacher); refreshAdmin(); alert(`Updated subjects for ${teacher.name}`); } }; }); }
-  function renderTeachersList() { let teachers = DB.users.filter(u=>u.role==='teacher'); let html='<div>'; teachers.forEach(t=>{html+=`<div class="flex-between"><span>${escapeHtml(t.name)} (${escapeHtml(t.email)})</span><button class="small danger" data-del-teacher="${t.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('teachersList').innerHTML=html; document.querySelectorAll('[data-del-teacher]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delTeacher); refreshAdmin();}); }
-  function renderStudentsList() { let students = DB.users.filter(u=>u.role==='student'); let html='<div>'; students.forEach(s=>{ let classObj = DB.classes.find(c=>c.id===s.classId); let clsLabel = classObj ? getClassLabel(classObj) : (s.graduated ? '🎓 Graduated' : 'No class'); html+=`<div class="flex-between"><span>${escapeHtml(s.name)} (${escapeHtml(s.email)}) - ${clsLabel}</span><button class="small danger" data-del-student="${s.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('studentsList').innerHTML=html; document.querySelectorAll('[data-del-student]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delStudent); refreshAdmin();}); }
-  function renderSubjectApproval() { let html='<div class="form-grid">'; DB.subjects.forEach(s=>{html+=`<div><label><input type="checkbox" data-subj-approve="${s.id}" ${s.approved?'checked':''}> ${escapeHtml(s.name)}</label></div>`;}); html+='</div><button id="saveSubjectApprovalBtn" class="primary">Save Approvals</button>'; document.getElementById('subjectApprovalList').innerHTML=html; document.getElementById('saveSubjectApprovalBtn')?.addEventListener('click',async()=>{for(let cb of document.querySelectorAll('[data-subj-approve]')){let sid=cb.dataset.subjApprove; let subj=DB.subjects.find(s=>s.id===sid); if(subj){subj.approved=cb.checked; await updateSubject(subj);}} refreshAdmin();}); }
-  function renderExamResultsOverview() { let results=DB.examsTaken; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>'; for (let r of results) { let student=DB.users.find(u=>u.id===r.studentId); html+=`<tr><td>${student?escapeHtml(student.name):'?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td><button class="small danger delete-exam-result" data-result-id="${r.id}">Delete</button></td>`; } html+='</tbody></table>'; document.getElementById('adminResultsOverview').innerHTML=html||'<p>No exam results.</p>'; document.querySelectorAll('.delete-exam-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshAdmin(); } }); }
-  function renderAssignmentResultsOverview() { let results=DB.assignmentResults; let html='<table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; results.forEach(r=>{let student=DB.users.find(u=>u.id===r.studentId); let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${student?escapeHtml(student.name):'?'}</td><td>${assign?escapeHtml(assign.title):'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('adminAssignmentResults').innerHTML=html||'<p>No assignment results.</p>'; }
-  function renderAdminExamsList() { let html = '<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Title</th><th>Teacher</th><th>Subject</th><th>Base Class</th><th>Type</th><th>DateTime</th><th>Status</th><th>Actions</th></tr></thead><tbody>'; for (let exam of DB.exams) { let base = exam.baseClass || getBaseClassName(exam.classId) || 'N/A'; html += `<tr><td>${escapeHtml(exam.title)}</td><td>${getTeacherName(exam.teacherId)}</td><td>${getSubjectName(exam.subjectId)}</td><td>${base}</td><td>${exam.examType}</td><td>${new Date(exam.scheduledDateTime).toLocaleString()}</td><td><span class="badge ${exam.status}">${exam.status}</span></td><td><button class="small danger" data-del-exam="${exam.id}">Delete</button><button class="small" data-resched-exam="${exam.id}">Reschedule</button>${exam.status === 'pending' ? '<button class="small primary" data-approve-exam="'+exam.id+'">Approve</button>' : ''}${exam.status === 'approved' ? '<button class="small primary" data-publish-exam="'+exam.id+'">Publish</button>' : ''}</td></tr>`; } html += '</tbody></div>'; document.getElementById('adminExamsList').innerHTML = html || '<p>No exams created.</p>'; document.querySelectorAll('[data-del-exam]').forEach(btn => btn.onclick = async () => { await deleteExam(btn.dataset.delExam); refreshAdmin(); }); document.querySelectorAll('[data-resched-exam]').forEach(btn => btn.onclick = async () => { let examId = btn.dataset.reschedExam; let newDateTime = prompt("Enter new date & time (YYYY-MM-DDTHH:MM)", new Date().toISOString().slice(0,16)); if(newDateTime) { let exam = DB.exams.find(e=>e.id===examId); if(exam) { exam.scheduledDateTime = new Date(newDateTime).toISOString(); await updateExam(exam); refreshAdmin(); } } }); document.querySelectorAll('[data-approve-exam]').forEach(btn => btn.onclick = async () => { let exam = DB.exams.find(e=>e.id===btn.dataset.approveExam); if(exam) { exam.status = 'approved'; await updateExam(exam); refreshAdmin(); } }); document.querySelectorAll('[data-publish-exam]').forEach(btn => btn.onclick = async () => { let exam = DB.exams.find(e=>e.id===btn.dataset.publishExam); if(exam) { exam.status = 'published'; await updateExam(exam); alert(`Exam "${exam.title}" is now published for all arms of ${exam.baseClass}.`); refreshAdmin(); } }); }
+  function renderTeachersList() { let teachers = DB.users.filter(u=>u.role==='teacher'); let html='<div>'; teachers.forEach(t=>{html+=`<div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid #eef2f6;"><span>${escapeHtml(t.name)} (${escapeHtml(t.email)})</span><button class="small danger" data-del-teacher="${t.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('teachersList').innerHTML=html||'<p>No teachers.</p>'; document.querySelectorAll('[data-del-teacher]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delTeacher); refreshAdmin();}); }
+  function renderStudentsList() { let students = DB.users.filter(u=>u.role==='student'); let html='<div>'; students.forEach(s=>{ let classObj = DB.classes.find(c=>c.id===s.classId); let clsLabel = classObj ? getClassLabel(classObj) : (s.graduated ? '🎓 Graduated' : 'No class'); html+=`<div class="flex-between" style="padding:0.5rem 0; border-bottom:1px solid #eef2f6;"><span>${escapeHtml(s.name)} (${escapeHtml(s.email)}) - ${clsLabel}</span><button class="small danger" data-del-student="${s.id}">Delete</button></div>`;}); html+='</div>'; document.getElementById('studentsList').innerHTML=html||'<p>No students.</p>'; document.querySelectorAll('[data-del-student]').forEach(btn=>btn.onclick=async()=>{await deleteUser(btn.dataset.delStudent); refreshAdmin();}); }
+  function renderSubjectApproval() { let html='<div class="form-grid">'; DB.subjects.forEach(s=>{html+=`<div><label style="display:flex; align-items:center; gap:0.4rem; font-size:0.85rem;"><input type="checkbox" data-subj-approve="${s.id}" ${s.approved?'checked':''}> ${escapeHtml(s.name)}</label></div>`;}); html+='</div><button id="saveSubjectApprovalBtn" class="primary">Save Approvals</button>'; document.getElementById('subjectApprovalList').innerHTML=html; document.getElementById('saveSubjectApprovalBtn')?.addEventListener('click',async()=>{for(let cb of document.querySelectorAll('[data-subj-approve]')){let sid=cb.dataset.subjApprove; let subj=DB.subjects.find(s=>s.id===sid); if(subj){subj.approved=cb.checked; await updateSubject(subj);}} refreshAdmin();}); }
+  function renderExamResultsOverview() { let results=DB.examsTaken; let html='<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>'; for (let r of results) { let student=DB.users.find(u=>u.id===r.studentId); html+=`<tr><td>${student?escapeHtml(student.name):'?'}</td><td>${getSubjectName(r.subjectId)}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td><button class="small danger delete-exam-result" data-result-id="${r.id}">Delete</button></td>`; } html+='</tbody></table></div>'; document.getElementById('adminResultsOverview').innerHTML=html||'<p>No exam results.</p>'; document.querySelectorAll('.delete-exam-result').forEach(btn => btn.onclick = async () => { if(confirm("Delete this exam result?")) { await deleteExamTaken(btn.dataset.resultId); refreshAdmin(); } }); }
+  function renderAssignmentResultsOverview() { let results=DB.assignmentResults; let html='<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; results.forEach(r=>{let student=DB.users.find(u=>u.id===r.studentId); let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${student?escapeHtml(student.name):'?'}</td><td>${assign?escapeHtml(assign.title):'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table></div>'; document.getElementById('adminAssignmentResults').innerHTML=html||'<p>No assignment results.</p>'; }
+  function renderAdminExamsList() { let html = '<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Title</th><th>Teacher</th><th>Subject</th><th>Base Class</th><th>Type</th><th>DateTime</th><th>Status</th><th>Actions</th></tr></thead><tbody>'; for (let exam of DB.exams) { let base = exam.baseClass || getBaseClassName(exam.classId) || 'N/A'; html += `<tr><td>${escapeHtml(exam.title)}</td><td>${getTeacherName(exam.teacherId)}</td><td>${getSubjectName(exam.subjectId)}</td><td>${base}</td><td>${exam.examType}</td><td>${new Date(exam.scheduledDateTime).toLocaleString()}</td><td><span class="badge ${exam.status}">${exam.status}</span></td><td><button class="small danger" data-del-exam="${exam.id}">Delete</button><button class="small" data-resched-exam="${exam.id}">Reschedule</button>${exam.status === 'pending' ? '<button class="small primary" data-approve-exam="'+exam.id+'">Approve</button>' : ''}${exam.status === 'approved' ? '<button class="small primary" data-publish-exam="'+exam.id+'">Publish</button>' : ''}</td></tr>`; } html += '</tbody></table></div>'; document.getElementById('adminExamsList').innerHTML = html || '<p>No exams created.</p>'; document.querySelectorAll('[data-del-exam]').forEach(btn => btn.onclick = async () => { await deleteExam(btn.dataset.delExam); refreshAdmin(); }); document.querySelectorAll('[data-resched-exam]').forEach(btn => btn.onclick = async () => { let examId = btn.dataset.reschedExam; let newDateTime = prompt("Enter new date & time (YYYY-MM-DDTHH:MM)", new Date().toISOString().slice(0,16)); if(newDateTime) { let exam = DB.exams.find(e=>e.id===examId); if(exam) { exam.scheduledDateTime = new Date(newDateTime).toISOString(); await updateExam(exam); refreshAdmin(); } } }); document.querySelectorAll('[data-approve-exam]').forEach(btn => btn.onclick = async () => { let exam = DB.exams.find(e=>e.id===btn.dataset.approveExam); if(exam) { exam.status = 'approved'; await updateExam(exam); refreshAdmin(); } }); document.querySelectorAll('[data-publish-exam]').forEach(btn => btn.onclick = async () => { let exam = DB.exams.find(e=>e.id===btn.dataset.publishExam); if(exam) { exam.status = 'published'; await updateExam(exam); alert(`Exam "${exam.title}" is now published for all arms of ${exam.baseClass}.`); refreshAdmin(); } }); }
   document.getElementById('adminCreateExamBtn')?.addEventListener('click', async () => { let title = prompt("Exam Title:"); if(!title) return; let teacherId = prompt("Teacher ID (enter email or id):"); let teacher = DB.users.find(u => (u.id === teacherId || u.email === teacherId) && u.role === 'teacher'); if(!teacher) { alert("Teacher not found"); return; } let subjectId = prompt("Subject ID:"); if(!DB.subjects.find(s=>s.id===subjectId)) { alert("Subject not found"); return; } let classId = prompt("Class ID (any arm):"); let targetClass = DB.classes.find(c=>c.id===classId); if(!targetClass) { alert("Class not found"); return; } let baseClass = targetClass.className; let examType = prompt("Exam Type (midterm/final):", "midterm"); let dateTimeStr = prompt("Scheduled date (YYYY-MM-DDTHH:MM)", new Date().toISOString().slice(0,16)); let examId = "exam_"+Date.now()+Math.random(); let newExam = { id: examId, title, teacherId: teacher.id, subjectId, classId, baseClass, examType, scheduledDateTime: new Date(dateTimeStr).toISOString(), status: "pending", questions: [], createdAt: Date.now() }; await addExam(newExam); refreshAdmin(); alert("Exam created."); });
-  async function renderMyQuestionsBySubject() { let myQuestions = DB.questions.filter(q => q.teacherId === currentUser.id); let bySubject = {}; myQuestions.forEach(q => { if(!bySubject[q.subjectId]) bySubject[q.subjectId] = []; bySubject[q.subjectId].push(q); }); let container = document.getElementById('myQuestionsBySubject'); container.innerHTML = ''; for(let sid in bySubject) { let subjName = getSubjectName(sid); let div = document.createElement('div'); div.innerHTML = `<div class="collapsible" data-subj="${sid}">📘 ${escapeHtml(subjName)} (${bySubject[sid].length} questions)</div><div class="questions-list" id="qlist-${sid}"></div>`; container.appendChild(div); let qlistDiv = div.querySelector(`#qlist-${sid}`); bySubject[sid].forEach(q => { let qDiv = document.createElement('div'); qDiv.innerHTML = `<strong>${escapeHtml(q.text)}</strong><br>Options: ${q.options.map(escapeHtml).join(', ')}<br>Correct: ${escapeHtml(q.options[q.correct])} <button class="small danger" data-del-q="${q.id}">Delete</button>`; qlistDiv.appendChild(qDiv); }); div.querySelector('.collapsible').addEventListener('click', () => { let content = div.querySelector('.questions-list'); content.style.display = content.style.display === 'block' ? 'none' : 'block'; }); } document.querySelectorAll('[data-del-q]').forEach(btn => btn.onclick = async () => { let qid = btn.dataset.delQ; DB.questions = DB.questions.filter(q => q.id !== qid); await deleteQuestion(qid); refreshTeacher(); }); }
-  function renderTeacherAssignments() { let myAssign = DB.assignments.filter(a => a.teacherId === currentUser.id); let html = '<table style="width:100%"><thead><tr><th>Title</th><th>Subject</th><th>Class</th><th>Questions</th><th>Action</th></tr></thead><tbody>'; myAssign.forEach(a => { html += `<tr><td>${escapeHtml(a.title)}</td><td>${getSubjectName(a.subjectId)}</td><td>${getClassLabel(DB.classes.find(c=>c.id===a.classId))}</td><td>${a.questions.length}</td><td><button class="small danger" data-del-ass="${a.id}">Delete</button></td></tr>`; }); html += '</tbody></table>'; document.getElementById('teacherAssignmentsList').innerHTML = html; document.querySelectorAll('[data-del-ass]').forEach(btn => btn.onclick = async () => { await deleteAssignment(btn.dataset.delAss); refreshTeacher(); }); }
+  async function renderMyQuestionsBySubject() { let myQuestions = DB.questions.filter(q => q.teacherId === currentUser.id); let bySubject = {}; myQuestions.forEach(q => { if(!bySubject[q.subjectId]) bySubject[q.subjectId] = []; bySubject[q.subjectId].push(q); }); let container = document.getElementById('myQuestionsBySubject'); container.innerHTML = ''; for(let sid in bySubject) { let subjName = getSubjectName(sid); let div = document.createElement('div'); div.innerHTML = `<div class="collapsible" data-subj="${sid}">📘 ${escapeHtml(subjName)} (${bySubject[sid].length} questions)</div><div class="questions-list" id="qlist-${sid}"></div>`; container.appendChild(div); let qlistDiv = div.querySelector(`#qlist-${sid}`); bySubject[sid].forEach(q => { let qDiv = document.createElement('div'); qDiv.style.padding = '0.4rem 0'; qDiv.style.borderBottom = '1px dashed #eef2f6'; qDiv.innerHTML = `<strong>${escapeHtml(q.text)}</strong><br>Options: ${q.options.map(escapeHtml).join(', ')}<br>Correct: ${escapeHtml(q.options[q.correct])} <button class="small danger" data-del-q="${q.id}">Delete</button>`; qlistDiv.appendChild(qDiv); }); div.querySelector('.collapsible').addEventListener('click', () => { let content = div.querySelector('.questions-list'); content.style.display = content.style.display === 'block' ? 'none' : 'block'; }); } document.querySelectorAll('[data-del-q]').forEach(btn => btn.onclick = async () => { let qid = btn.dataset.delQ; DB.questions = DB.questions.filter(q => q.id !== qid); await deleteQuestion(qid); refreshTeacher(); }); }
+  function renderTeacherAssignments() { let myAssign = DB.assignments.filter(a => a.teacherId === currentUser.id); let html = '<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Title</th><th>Subject</th><th>Class</th><th>Questions</th><th>Action</th></tr></thead><tbody>'; myAssign.forEach(a => { html += `<tr><td>${escapeHtml(a.title)}</td><td>${getSubjectName(a.subjectId)}</td><td>${getClassLabel(DB.classes.find(c=>c.id===a.classId))}</td><td>${a.questions.length}</td><td><button class="small danger" data-del-ass="${a.id}">Delete</button></td></tr>`; }); html += '</tbody></table></div>'; document.getElementById('teacherAssignmentsList').innerHTML = html||'<p>No assignments yet.</p>'; document.querySelectorAll('[data-del-ass]').forEach(btn => btn.onclick = async () => { await deleteAssignment(btn.dataset.delAss); refreshTeacher(); }); }
 
   // ============================================================
   // ====== TEACHER ANALYTICS — MIDTERM / FINAL SEPARATED =======
@@ -948,7 +1287,7 @@
     });
 
     const buildExamTable = (results, emptyMsg) => {
-      let h = `<table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>`;
+      let h = `<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Student</th><th>Subject</th><th>Score</th><th>Date</th><th>Action</th></tr></thead><tbody>`;
       if (results.length === 0) h += `<tr><td colspan="5">${emptyMsg}</td></tr>`;
       else results.forEach(r => {
         const student = DB.users.find(u => u.id === r.studentId);
@@ -960,12 +1299,12 @@
                 <td><button class="small danger delete-teacher-result" data-result-id="${r.id}">Delete</button></td>
               </tr>`;
       });
-      h += `</tbody></table>`;
+      h += `</tbody></table></div>`;
       return h;
     };
 
     const buildAssignTable = (results) => {
-      let h = `<table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>`;
+      let h = `<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Student</th><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>`;
       if (results.length === 0) h += `<tr><td colspan="4">No assignment attempts.</td></tr>`;
       else results.forEach(r => {
         const student = DB.users.find(u => u.id === r.studentId);
@@ -977,7 +1316,7 @@
                 <td>${new Date(r.timestamp).toLocaleString()}</td>
               </tr>`;
       });
-      h += `</tbody></table>`;
+      h += `</tbody></table></div>`;
       return h;
     };
 
@@ -1038,11 +1377,11 @@
       let examDate = new Date(exam.scheduledDateTime);
       let alreadyTaken = DB.examsTaken.some(t => t.examId === exam.id && t.studentId === currentUser.id);
       if(alreadyTaken) {
-        html += `<div class="card"><strong>${escapeHtml(exam.title)}</strong> (${getSubjectName(exam.subjectId)}) - <span class="badge">Taken</span></div>`;
+        html += `<div class="card" style="padding:0.85rem;"><strong>${escapeHtml(exam.title)}</strong> (${getSubjectName(exam.subjectId)}) - <span class="badge">Taken</span></div>`;
       } else if(now >= examDate) {
-        html += `<div class="card"><strong>${escapeHtml(exam.title)}</strong> (${exam.examType}) - ${getSubjectName(exam.subjectId)}<br><button class="primary small start-scheduled-exam" data-exam-id="${exam.id}">Start Exam</button></div>`;
+        html += `<div class="card" style="padding:0.85rem;"><strong>${escapeHtml(exam.title)}</strong> (${exam.examType}) - ${getSubjectName(exam.subjectId)}<br><button class="primary small start-scheduled-exam" data-exam-id="${exam.id}" style="margin-top:0.4rem;">Start Exam</button></div>`;
       } else {
-        html += `<div class="card"><strong>${escapeHtml(exam.title)}</strong> (${exam.examType}) - ${getSubjectName(exam.subjectId)}<br><span class="badge">Available from: ${examDate.toLocaleString()}</span> <button disabled class="primary small">Not yet available</button></div>`;
+        html += `<div class="card" style="padding:0.85rem;"><strong>${escapeHtml(exam.title)}</strong> (${exam.examType}) - ${getSubjectName(exam.subjectId)}<br><span class="badge">Available from: ${examDate.toLocaleString()}</span> <button disabled class="primary small" style="margin-top:0.4rem;">Not yet available</button></div>`;
       }
     }
     html += '</div>';
@@ -1062,10 +1401,10 @@
     });
   }
 
-  function renderAvailableAssignments() { let studentBase = getBaseClassName(currentUser.classId); let assignmentsForBase = studentBase ? DB.assignments.filter(a => a.baseClass === studentBase) : []; let html = '<div>'; for(let a of assignmentsForBase) { html += `<div class="card" style="margin:0.5rem 0;"><strong>${escapeHtml(a.title)}</strong> (${getSubjectName(a.subjectId)}) - ${a.questions.length} questions <button class="small primary" data-start-ass="${a.id}">Take Assignment</button></div>`; } html += '</div>'; document.getElementById('assignmentsListForStudent').innerHTML = html || '<p>No assignments for your class.</p>'; document.querySelectorAll('[data-start-ass]').forEach(btn=>btn.onclick=()=>startAssignment(btn.dataset.startAss)); }
+  function renderAvailableAssignments() { let studentBase = getBaseClassName(currentUser.classId); let assignmentsForBase = studentBase ? DB.assignments.filter(a => a.baseClass === studentBase) : []; let html = '<div>'; for(let a of assignmentsForBase) { html += `<div class="card" style="padding:0.85rem; margin-bottom:0.6rem;"><strong>${escapeHtml(a.title)}</strong> (${getSubjectName(a.subjectId)}) - ${a.questions.length} questions <br><button class="small primary" data-start-ass="${a.id}" style="margin-top:0.4rem;">Take Assignment</button></div>`; } html += '</div>'; document.getElementById('assignmentsListForStudent').innerHTML = html || '<p>No assignments for your class.</p>'; document.querySelectorAll('[data-start-ass]').forEach(btn=>btn.onclick=()=>startAssignment(btn.dataset.startAss)); }
   async function startAssignment(assignId){ alert("Assignment taking feature active."); }
-  function renderStudentExamHistory() { let myExams=DB.examsTaken.filter(e=>e.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Subject</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myExams.forEach(e=>{html+=`<tr><td>${getSubjectName(e.subjectId)}</td><td>${e.score}/${e.total}</td><td>${new Date(e.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentResultsHistory').innerHTML=html||'<p>No exams taken.</p>'; }
-  function renderStudentAssignmentHistory() { let myResults=DB.assignmentResults.filter(r=>r.studentId===currentUser.id); let html='<table style="width:100%"><thead><tr><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myResults.forEach(r=>{let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${assign?escapeHtml(assign.title):'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table>'; document.getElementById('studentAssignmentResults').innerHTML=html||'<p>No assignments attempted.</p>'; }
+  function renderStudentExamHistory() { let myExams=DB.examsTaken.filter(e=>e.studentId===currentUser.id); let html='<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Subject</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myExams.forEach(e=>{html+=`<tr><td>${getSubjectName(e.subjectId)}</td><td>${e.score}/${e.total}</td><td>${new Date(e.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table></div>'; document.getElementById('studentResultsHistory').innerHTML=html||'<p>No exams taken.</p>'; }
+  function renderStudentAssignmentHistory() { let myResults=DB.assignmentResults.filter(r=>r.studentId===currentUser.id); let html='<div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>Assignment</th><th>Score</th><th>Date</th></tr></thead><tbody>'; myResults.forEach(r=>{let assign=DB.assignments.find(a=>a.id===r.assignmentId); html+=`<tr><td>${assign?escapeHtml(assign.title):'?'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;}); html+='</tbody></table></div>'; document.getElementById('studentAssignmentResults').innerHTML=html||'<p>No assignments attempted.</p>'; }
   document.getElementById('doLoginBtn')?.addEventListener('click', async () => { let email=document.getElementById('loginEmail').value; let pwd=document.getElementById('loginPassword').value; let user=DB.users.find(u=>u.email===email&&u.password===pwd); if(user){ currentUser=user; saveUserSession(user); renderAll(); } else alert("Invalid credentials."); });
 
   document.getElementById('globalLogoutBtn')?.addEventListener('click',()=>{
@@ -1583,7 +1922,7 @@
   </div>
   <textarea id="eqLatexInput" class="eq-input" placeholder="Type your equation here or click buttons above. Example: \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}"></textarea>
   <div class="eq-preview" id="eqPreview">\( \)</div>
-  <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:8px;">
+  <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:8px; flex-wrap:wrap;">
     <button id="insertEqBtn" style="background:#f5b042; color:#1e2f3a; border:none; padding:6px 16px; border-radius:40px;">Insert into Question</button>
     <button id="cancelEqBtn" style="background:#e2e8f0; border:none; padding:6px 16px; border-radius:40px;">Cancel</button>
   </div>
